@@ -6,5 +6,6 @@
     <string name="lon">Longitude</string>
     <string name="dist">Accuracy</string>
     <string name="time">Time</string>
+    <string name="prov">Provider</string>
 
 </resources>

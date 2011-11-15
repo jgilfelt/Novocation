@@ -78,20 +78,27 @@ public class LocationActivity extends Activity {
     
     private void displayNewLocation(Location freshLocation) {
         View block = getLayoutInflater().inflate(R.layout.location_table, null);
+        
+        TextView time = (TextView) block.findViewById(R.id.val_time);
+        TextView accuracy = (TextView) block.findViewById(R.id.val_acc);
+        TextView provider = (TextView) block.findViewById(R.id.val_prov);
         TextView latitude = (TextView) block.findViewById(R.id.val_lat);
         TextView longitude = (TextView) block.findViewById(R.id.val_lon);
-        TextView accuracy = (TextView) block.findViewById(R.id.val_dist);
-        TextView time = (TextView) block.findViewById(R.id.val_time);
         
+        time.setText(getFormattedTime(freshLocation));
+        accuracy.setText(freshLocation.getAccuracy() + "m");
+        provider.setText(freshLocation.getProvider());
         latitude.setText("" + freshLocation.getLatitude());
         longitude.setText("" + freshLocation.getLongitude());
-        accuracy.setText(freshLocation.getAccuracy() + "m");
         
-        Date locDate = new Date(freshLocation.getTime());
-        CharSequence formattedTime = DateFormat.format("hh:mm:ss", locDate);
-        
-        time.setText(formattedTime);
+        time.setText(getFormattedTime(freshLocation));
         viewGroup.addView(block);
+    }
+
+    private CharSequence getFormattedTime(Location location) {
+        Date locDate = new Date(location.getTime());
+        CharSequence formattedTime = DateFormat.format("hh:mm:ss", locDate);
+        return formattedTime;
     }
 
 }
