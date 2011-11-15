@@ -16,6 +16,8 @@
 
 package com.novoda.locationexample;
 
+import java.util.Date;
+
 import com.novoda.locationexample.R;
 import com.novoda.location.core.NovocationLocation;
 
@@ -26,22 +28,21 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class LocationActivity extends Activity {
     
     private NovocationLocation novoLoc;
-    
-    private TextView lat;
-    private TextView lon;
-    private TextView dist;
-    private TextView time;
+    public ViewGroup viewGroup;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        initialiseViews();
+        viewGroup = (ViewGroup) findViewById(R.id.content);
         
         LocationApplication app = (LocationApplication) getApplication();
         novoLoc = app.getLocator();
@@ -55,9 +56,8 @@ public class LocationActivity extends Activity {
         registerReceiver(freshLocationReceiver, filter);
         
         novoLoc.startLocationUpdates(true, true, true);
-        
         if (novoLoc.getLocation() != null) {
-            updateLocationViews(novoLoc.getLocation());
+            displayNewLocation(novoLoc.getLocation());
         }
     }
     
@@ -72,22 +72,26 @@ public class LocationActivity extends Activity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateLocationViews(novoLoc.getLocation());
+            displayNewLocation(novoLoc.getLocation());
         }  
     };
     
-    private void initialiseViews() {
-        lat = (TextView) findViewById(R.id.val_lat);
-        lon = (TextView) findViewById(R.id.val_lon);
-        dist = (TextView) findViewById(R.id.val_dist);
-        time = (TextView) findViewById(R.id.val_time);
+    private void displayNewLocation(Location freshLocation) {
+        View block = getLayoutInflater().inflate(R.layout.location_table, null);
+        TextView latitude = (TextView) block.findViewById(R.id.val_lat);
+        TextView longitude = (TextView) block.findViewById(R.id.val_lon);
+        TextView accuracy = (TextView) block.findViewById(R.id.val_dist);
+        TextView time = (TextView) block.findViewById(R.id.val_time);
+        
+        latitude.setText("" + freshLocation.getLatitude());
+        longitude.setText("" + freshLocation.getLongitude());
+        accuracy.setText(freshLocation.getAccuracy() + "m");
+        
+        Date locDate = new Date(freshLocation.getTime());
+        CharSequence formattedTime = DateFormat.format("hh:mm:ss", locDate);
+        
+        time.setText(formattedTime);
+        viewGroup.addView(block);
     }
-    
-    private void updateLocationViews(Location loc) {
-        lat.setText("" + loc.getLatitude());
-        lon.setText("" + loc.getLongitude());
-        dist.setText("" + loc.getAccuracy());
-        time.setText("" + loc.getTime());
-    } 
 
 }

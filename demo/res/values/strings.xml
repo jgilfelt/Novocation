@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">NovocationExample</string>
+    <string name="app_name">Novocation Demo</string>
     <string name="lat">Latitude</string>
     <string name="lon">Longitude</string>
     <string name="dist">Accuracy</string>
