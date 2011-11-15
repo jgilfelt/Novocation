@@ -54,7 +54,6 @@ public class LocationActivity extends Activity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.LOCATION_UPDATE_ACTION);
         registerReceiver(freshLocationReceiver, filter);
-        
         novoLoc.startLocationUpdates();
     }
     
@@ -66,7 +65,6 @@ public class LocationActivity extends Activity {
     }
     
     public BroadcastReceiver freshLocationReceiver = new BroadcastReceiver() {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             displayNewLocation(novoLoc.getLocation());

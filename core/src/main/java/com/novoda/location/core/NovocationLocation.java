@@ -62,6 +62,12 @@ public class NovocationLocation {
     public static NovocationLocation getInstance() {
         return NovocationLocationHolder.instance;
     }
+    
+    public void connect(Context appContext, NovocationSettings settings) {
+        this.appContext = appContext;
+        this.settings = settings;
+        locationManager = (LocationManager) appContext.getSystemService(Context.LOCATION_SERVICE);
+    }
 
     public Location getLocation() {
         return currentLocation;
@@ -72,12 +78,6 @@ public class NovocationLocation {
         sendLocationUpdateBroadcast();
     }
 
-    public void connect(Context appContext, NovocationSettings settings) {
-        this.appContext = appContext;
-        this.settings = settings;
-        locationManager = (LocationManager) appContext.getSystemService(Context.LOCATION_SERVICE);
-    }
-
     private void sendLocationUpdateBroadcast() {
         if (appContext != null) {
             Intent broadcast = new Intent();
@@ -85,6 +85,10 @@ public class NovocationLocation {
             broadcast.setPackage(settings.getPackageName());
             appContext.sendBroadcast(broadcast);
         }
+    }
+    
+    public NovocationSettings getSettings() {
+        return settings;
     }
 
     public void startLocationUpdates() {

@@ -1,74 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TableLayout
+<LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/location_table"
   style="@style/Fill.Width"
-  android:stretchColumns="0"
-  android:padding="5dp"
-  android:background="#444444">
+  android:paddingBottom="5dp">
+  <TableLayout
+    style="@style/Fill.Width"
+    android:stretchColumns="0"
+    android:padding="5dp"
+    android:background="#444444">
 
-  <TableRow style="@style/Fill.Width">
+    <TableRow style="@style/Fill.Width">
 
-    <TextView
-      style="@style/Wrap"
-      android:text="@string/time">
-    </TextView>
+      <TextView
+        style="@style/Wrap"
+        android:text="@string/time">
+      </TextView>
 
-    <TextView
-      android:id="@+id/val_time"
-      style="@style/Wrap">
-    </TextView>
-  </TableRow>
+      <TextView
+        android:id="@+id/val_time"
+        style="@style/Wrap">
+      </TextView>
+    </TableRow>
 
-  <TableRow style="@style/Fill.Width">
+    <TableRow style="@style/Fill.Width">
 
-    <TextView
-      style="@style/Wrap"
-      android:text="@string/dist">
-    </TextView>
+      <TextView
+        style="@style/Wrap"
+        android:text="@string/dist">
+      </TextView>
 
-    <TextView
-      android:id="@+id/val_acc"
-      style="@style/Wrap">
-    </TextView>
-  </TableRow>
+      <TextView
+        android:id="@+id/val_acc"
+        style="@style/Wrap">
+      </TextView>
+    </TableRow>
 
-  <TableRow style="@style/Fill.Width">
-    <TextView
-      style="@style/Wrap"
-      android:text="@string/prov">
-    </TextView>
+    <TableRow style="@style/Fill.Width">
+      <TextView
+        style="@style/Wrap"
+        android:text="@string/prov">
+      </TextView>
 
-    <TextView
-      android:id="@+id/val_prov"
-      style="@style/Wrap">
-    </TextView>
-  </TableRow>
+      <TextView
+        android:id="@+id/val_prov"
+        style="@style/Wrap">
+      </TextView>
+    </TableRow>
 
-  <TableRow style="@style/Fill.Width">
+    <TableRow style="@style/Fill.Width">
 
-    <TextView
-      style="@style/Wrap"
-      android:text="@string/lat">
-    </TextView>
+      <TextView
+        style="@style/Wrap"
+        android:text="@string/lat">
+      </TextView>
 
-    <TextView
-      android:id="@+id/val_lat"
-      style="@style/Wrap">
-    </TextView>
-  </TableRow>
+      <TextView
+        android:id="@+id/val_lat"
+        style="@style/Wrap">
+      </TextView>
+    </TableRow>
 
-  <TableRow style="@style/Fill.Width">
+    <TableRow style="@style/Fill.Width">
 
-    <TextView
-      style="@style/Wrap"
-      android:text="@string/lon">
-    </TextView>
+      <TextView
+        style="@style/Wrap"
+        android:text="@string/lon">
+      </TextView>
 
-    <TextView
-      android:id="@+id/val_lon"
-      style="@style/Wrap">
-    </TextView>
-  </TableRow>
-</TableLayout>
+      <TextView
+        android:id="@+id/val_lon"
+        style="@style/Wrap">
+      </TextView>
+    </TableRow>
+  </TableLayout>
+</LinearLayout>
