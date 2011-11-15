@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <!-- _WIDTH_HEIGHT -->
+  <style name="Fill">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:orientation">vertical</item>
+  </style>
+
+  <style name="Wrap">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
+  </style>
+
+  <style name="Fill.Height" parent="Fill">
+    <item name="android:layout_width">wrap_content</item>
+  </style>
+
+  <style name="Fill.Width" parent="Fill">
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
+  <style name="Fill.Width.Centre" parent="Fill.Width">
+    <item name="android:gravity">center</item>
+  </style>
+
+  <style name="Fill.Width.Horizontal" parent="Fill.Width">
+    <item name="android:orientation">horizontal</item>
+  </style>
+
+</resources>
