@@ -87,12 +87,12 @@ public class NovocationLocation {
         }
     }
 
-    public void startLocationUpdates(boolean usePassiveProvider, boolean useGps, boolean requestUpdates) {
+    public void startLocationUpdates() {
 
         // Specify the Criteria to use when requesting location updates while
         // the application is Active.
         criteria = new Criteria();
-        if (useGps) {
+        if (settings.shouldUseGps()) {
             criteria.setAccuracy(Criteria.ACCURACY_FINE);
         } else {
             criteria.setPowerRequirement(Criteria.POWER_LOW);

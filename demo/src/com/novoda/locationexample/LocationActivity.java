@@ -55,10 +55,7 @@ public class LocationActivity extends Activity {
         filter.addAction(Constants.LOCATION_UPDATE_ACTION);
         registerReceiver(freshLocationReceiver, filter);
         
-        novoLoc.startLocationUpdates(true, true, true);
-        if (novoLoc.getLocation() != null) {
-            displayNewLocation(novoLoc.getLocation());
-        }
+        novoLoc.startLocationUpdates();
     }
     
     @Override
