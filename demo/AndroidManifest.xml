@@ -21,9 +21,15 @@
       </intent-filter>
     </activity>
 
-    <receiver android:name="com.novoda.location.receiver.LocationChangedReceiver" />
+    <receiver android:name="com.novoda.location.receiver.LocationChangedReceiver">
+      <intent-filter>
+        <action
+          android:name="com.github.ignition.location.ACTIVE_LOCATION_UPDATE_ACTION" />
+      </intent-filter>
+    </receiver>
 
-    <receiver android:name="com.novoda.location.receiver.PassiveLocationChangedReceiver" />
+    <receiver
+      android:name="com.novoda.location.receiver.PassiveLocationChangedReceiver" />
 
     <receiver
       enabled="false"
