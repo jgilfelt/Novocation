@@ -2,10 +2,21 @@
 <resources>
 
     <string name="app_name">Novocation Demo</string>
-    <string name="lat">Latitude</string>
-    <string name="lon">Longitude</string>
-    <string name="dist">Accuracy</string>
+    
+    <!-- Settings -->
+    <string name="use_gps">Use GPS</string>
+    <string name="updates">Updates</string>
+    <string name="passive_updates">Passive updates</string>
+    <string name="update_interval">Update interval</string>
+    <string name="update_distance">Update distance</string>
+    <string name="passive_interval">Passive interval</string>
+    <string name="passive_distance">Passive distance</string>
+    
+    <!-- Location -->
     <string name="time">Time</string>
-    <string name="prov">Provider</string>
+    <string name="accuracy">Accuracy</string>
+    <string name="provider">Provider</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
 
 </resources>

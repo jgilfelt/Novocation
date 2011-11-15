@@ -2,24 +2,24 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/location_table"
+  android:id="@+id/settings_table"
   style="@style/Fill.Width"
   android:paddingBottom="5dp">
   <TableLayout
     style="@style/Fill.Width"
     android:stretchColumns="0"
     android:padding="5dp"
-    android:background="#444444">
+    android:background="#666666">
 
     <TableRow style="@style/Fill.Width">
 
       <TextView
         style="@style/Wrap"
-        android:text="@string/time">
+        android:text="@string/use_gps">
       </TextView>
 
       <TextView
-        android:id="@+id/val_time"
+        android:id="@+id/val_use_gps"
         style="@style/Wrap">
       </TextView>
     </TableRow>
@@ -28,11 +28,11 @@
 
       <TextView
         style="@style/Wrap"
-        android:text="@string/accuracy">
+        android:text="@string/updates">
       </TextView>
 
       <TextView
-        android:id="@+id/val_acc"
+        android:id="@+id/val_updates"
         style="@style/Wrap">
       </TextView>
     </TableRow>
@@ -40,24 +40,11 @@
     <TableRow style="@style/Fill.Width">
       <TextView
         style="@style/Wrap"
-        android:text="@string/provider">
+        android:text="@string/passive_updates">
       </TextView>
 
       <TextView
-        android:id="@+id/val_prov"
-        style="@style/Wrap">
-      </TextView>
-    </TableRow>
-
-    <TableRow style="@style/Fill.Width">
-
-      <TextView
-        style="@style/Wrap"
-        android:text="@string/latitude">
-      </TextView>
-
-      <TextView
-        android:id="@+id/val_lat"
+        android:id="@+id/val_passive_updates"
         style="@style/Wrap">
       </TextView>
     </TableRow>
@@ -66,11 +53,50 @@
 
       <TextView
         style="@style/Wrap"
-        android:text="@string/longitude">
+        android:text="@string/update_interval">
       </TextView>
 
       <TextView
-        android:id="@+id/val_lon"
+        android:id="@+id/val_update_interval"
+        style="@style/Wrap">
+      </TextView>
+    </TableRow>
+
+    <TableRow style="@style/Fill.Width">
+
+      <TextView
+        style="@style/Wrap"
+        android:text="@string/update_distance">
+      </TextView>
+
+      <TextView
+        android:id="@+id/val_update_distance"
+        style="@style/Wrap">
+      </TextView>
+    </TableRow>
+
+    <TableRow style="@style/Fill.Width">
+
+      <TextView
+        style="@style/Wrap"
+        android:text="@string/passive_interval">
+      </TextView>
+
+      <TextView
+        android:id="@+id/val_passive_interval"
+        style="@style/Wrap">
+      </TextView>
+    </TableRow>
+
+    <TableRow style="@style/Fill.Width">
+
+      <TextView
+        style="@style/Wrap"
+        android:text="@string/passive_distance">
+      </TextView>
+
+      <TextView
+        android:id="@+id/val_passive_distance"
         style="@style/Wrap">
       </TextView>
     </TableRow>

@@ -37,7 +37,7 @@ import com.novoda.location.receiver.PassiveLocationChangedReceiver;
 import com.novoda.location.task.LastKnownLocationTask;
 import com.novoda.location.util.Util;
 
-public class NovocationLocation {
+public class NovocationLocator {
 
     private Context appContext;
     private NovocationSettings settings;
@@ -51,15 +51,15 @@ public class NovocationLocation {
     private PendingIntent locationListenerPassivePendingIntent;
     private BetterProviderListener bestInactiveLocationProviderListener;
 
-    private NovocationLocation() {
+    private NovocationLocator() {
         // Singleton.
     };
 
     private static class NovocationLocationHolder {
-        public static final NovocationLocation instance = new NovocationLocation();
+        public static final NovocationLocator instance = new NovocationLocator();
     }
 
-    public static NovocationLocation getInstance() {
+    public static NovocationLocator getInstance() {
         return NovocationLocationHolder.instance;
     }
     

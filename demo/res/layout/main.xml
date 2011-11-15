@@ -10,5 +10,7 @@
     android:id="@+id/content"
     android:padding="5dp">
 
+    <include
+      layout="@layout/settings_table" />
   </LinearLayout>
 </ScrollView>
