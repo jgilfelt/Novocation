@@ -26,23 +26,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 
 /**
  * This Receiver class is used to listen for Broadcast Intents that announce
  * that a location change has occurred. This is used instead of a
- * LocationListener within an Activity is our only action is to start a service.
+ * LocationListener within an Activity.
  */
 public class LocationChangedReceiver extends BroadcastReceiver {
 
     /**
-     * When a new location is received, extract it from the Intent and use it to
-     * start the Service used to update the list of nearby places.
-     * 
      * This is the Active receiver, used to receive Location updates when the
      * Activity is visible.
      */
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.e("Novocation", "location change...");
+        
         String locationKey = LocationManager.KEY_LOCATION_CHANGED;
         String providerEnabledKey = LocationManager.KEY_PROVIDER_ENABLED;
         if (intent.hasExtra(providerEnabledKey)) {
@@ -53,9 +53,7 @@ public class LocationChangedReceiver extends BroadcastReceiver {
         }
         if (intent.hasExtra(locationKey)) {
             Location location = (Location) intent.getExtras().get(locationKey);
-
-            NovocationLocator novoLoc = NovocationLocator.getInstance();
-            novoLoc.setLocation(location);
+            NovocationLocator.getInstance().setLocation(location);
         }
     }
 }

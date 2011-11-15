@@ -43,14 +43,14 @@ public class BootReceiver extends BroadcastReceiver {
 
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
         boolean runOnce = prefs.getBoolean(Constants.SP_KEY_RUN_ONCE, false);
-        boolean followLocationChanges = prefs.getBoolean(Constants.SP_KEY_FOLLOW_LOCATION_CHANGES, true);
+        boolean passiveLocationChanges = prefs.getBoolean(Constants.SP_KEY_PASSIVE_LOCATION_CHANGES, true);
 
         if (runOnce) {
             LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             LocationUpdateRequester locationUpdateRequester = PlatformSpecificImplementationFactory
                     .getLocationUpdateRequester(locationManager);
 
-            if (followLocationChanges) {
+            if (passiveLocationChanges) {
                 // Passive location updates from 3rd party apps.
                 Intent passiveIntent = new Intent(context, PassiveLocationChangedReceiver.class);
                 PendingIntent locationListenerPassivePendingIntent = PendingIntent.getActivity(context, 0,

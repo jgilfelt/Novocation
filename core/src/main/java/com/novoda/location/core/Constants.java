@@ -29,7 +29,7 @@ public class Constants {
     
     public static final String SHARED_PREFERENCE_FILE = "novocation_prefs";
     public static final String SP_KEY_RUN_ONCE = "sp_key_run_once";
-    public static String SP_KEY_FOLLOW_LOCATION_CHANGES = "sp_key_follow_location_changes";
+    public static String SP_KEY_PASSIVE_LOCATION_CHANGES = "sp_key_follow_location_changes";
     public static String SP_KEY_LOCATION_UPDATES_DISTANCE_DIFF = "sp_location_updates_distance_diff";
     public static String SP_KEY_LOCATION_UPDATES_INTERVAL = "sp_key_location_updates_interval";
     public static String SP_KEY_PASSIVE_LOCATION_UPDATES_DISTANCE_DIFF = "sp_passive_location_updates_distance_diff";

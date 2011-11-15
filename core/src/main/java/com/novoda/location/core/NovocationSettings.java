@@ -103,12 +103,10 @@ public class NovocationSettings {
         this.passiveUpdatesDistanceDiff = passiveUpdatesDistanceDiff;
     }
     
-    public void saveCurrentSettingsToPreferences(Context context) {
+    public void savePassiveSettingsToPreferences(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
         Editor editor = prefs.edit();
-        editor.putBoolean(Constants.SP_KEY_FOLLOW_LOCATION_CHANGES, updateOnLocationChange);
-        editor.putInt(Constants.SP_KEY_LOCATION_UPDATES_DISTANCE_DIFF, updatesDistanceDiff);
-        editor.putLong(Constants.SP_KEY_LOCATION_UPDATES_INTERVAL, updatesInterval);
+        editor.putBoolean(Constants.SP_KEY_PASSIVE_LOCATION_CHANGES, enablePassiveUpdates);
         editor.putInt(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_DISTANCE_DIFF, passiveUpdatesDistanceDiff);
         editor.putLong(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_INTERVAL, passiveUpdatesInterval);
         editor.putBoolean(Constants.SP_KEY_RUN_ONCE, true);

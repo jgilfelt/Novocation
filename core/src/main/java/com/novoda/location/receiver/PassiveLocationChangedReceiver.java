@@ -59,8 +59,8 @@ public class PassiveLocationChangedReceiver extends BroadcastReceiver {
             // there has been a more recent Location received than the last
             // location we used.
 
-            long locationUpdateInterval = Util.getLocationUpdateInterval(context);
-            int locationUpdateDistanceDiff = Util.getLocationUpdateDistance(context);
+            long locationUpdateInterval = Util.getPassiveLocationInterval(context);
+            int locationUpdateDistanceDiff = Util.getPassiveLocationDistance(context);
 
             // Get the best last location detected from the providers.
             LegacyLastLocationFinder lastLocationFinder = new LegacyLastLocationFinder(context);

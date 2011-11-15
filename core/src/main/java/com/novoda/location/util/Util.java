@@ -25,7 +25,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 
 public class Util {
-    
+
     public static final int API_LEVEL;
     public static final boolean SUPPORTS_GINGERBREAD;
     public static final boolean SUPPORTS_FROYO;
@@ -44,15 +44,6 @@ public class Util {
 
     private static SharedPreferences getSharedPrefs(Context context) {
         return context.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
-    }
-
-    public static final long getLocationUpdateInterval(Context context) {
-        return getSharedPrefs(context).getLong(Constants.SP_KEY_LOCATION_UPDATES_INTERVAL, Constants.UPDATES_MAX_TIME);
-    }
-
-    public static final int getLocationUpdateDistance(Context context) {
-        return getSharedPrefs(context).getInt(Constants.SP_KEY_LOCATION_UPDATES_DISTANCE_DIFF,
-                Constants.UPDATES_MAX_DISTANCE);
     }
 
     public static final long getPassiveLocationInterval(Context context) {

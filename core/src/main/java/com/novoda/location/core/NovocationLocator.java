@@ -62,7 +62,7 @@ public class NovocationLocator {
     public static NovocationLocator getInstance() {
         return NovocationLocationHolder.instance;
     }
-    
+
     public void connect(Context appContext, NovocationSettings settings) {
         this.appContext = appContext;
         this.settings = settings;
@@ -86,7 +86,7 @@ public class NovocationLocator {
             appContext.sendBroadcast(broadcast);
         }
     }
-    
+
     public NovocationSettings getSettings() {
         return settings;
     }
@@ -114,7 +114,7 @@ public class NovocationLocator {
         // Instantiate a Location Update Requester class based on the available
         // platform version. This will be used to request location updates.
         locationUpdateRequester = PlatformSpecificImplementationFactory.getLocationUpdateRequester(locationManager);
-        settings.saveCurrentSettingsToPreferences(appContext);
+        settings.savePassiveSettingsToPreferences(appContext);
 
         if (currentLocation != null) {
             sendLocationUpdateBroadcast();
@@ -179,14 +179,11 @@ public class NovocationLocator {
             locationManager.requestLocationUpdates(bestProvider, 0, 0, bestInactiveLocationProviderListener,
                     context.getMainLooper());
         }
-
         locationManager.removeUpdates(locationListenerPassivePendingIntent);
     }
 
     /**
      * Stop listening for location updates
-     * 
-     * @param enablePassiveLocationUpdates
      */
     protected void disableLocationUpdates(boolean enablePassiveLocationUpdates, boolean finishing) {
 
@@ -202,8 +199,7 @@ public class NovocationLocator {
 
         if (Util.SUPPORTS_FROYO && enablePassiveLocationUpdates) {
             // Passive location updates from 3rd party apps when the Activity
-            // isn't
-            // visible. Only for Android 2.2+.
+            // isn't visible. Only for Android 2.2+.
             locationUpdateRequester.requestPassiveLocationUpdates(settings.getUpdatesInterval(),
                     settings.getUpdatesDistanceDiff(), locationListenerPassivePendingIntent);
         }
