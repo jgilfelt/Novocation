@@ -31,6 +31,9 @@ public class LocationApplication extends Application {
 
         NovocationSettings locationSettings = new NovocationSettings(Constants.PACKAGE_NAME,
                 Constants.LOCATION_UPDATE_ACTION);
+        locationSettings.setEnablePassiveUpdates(true);
+        locationSettings.setUpdatesInterval(1* 60 * 1000);
+        locationSettings.setUpdatesDistanceDiff(10);
         locator = NovocationLocator.getInstance();
         locator.connect(getApplicationContext(), locationSettings);
     }

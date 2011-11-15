@@ -27,12 +27,12 @@ public class NovocationSettings {
     
     // Defaults
     private boolean useGps = true;
-    private boolean updateOnLocationChanges = true;
+    private boolean updateOnLocationChange = true;
     private boolean enablePassiveUpdates = false;
-    private long locationUpdatesInterval = 5 * 60 * 1000; // 5min
-    private int locationUpdatesDistanceDiff = 100; // 100m
-    private long passiveLocationUpdatesInterval = 15 * 60 * 1000; // 15min
-    private int passiveLocatoionUpdatesDistanceDiff = 300; // 300m
+    private long updatesInterval = 5 * 60 * 1000; // 5min
+    private int updatesDistanceDiff = 100; // 100m
+    private long passiveUpdatesInterval = 15 * 60 * 1000; // 15min
+    private int passiveUpdatesDistanceDiff = 300; // 300m
     
     public NovocationSettings(String packageName, String updateAction) {
         this.packageName = packageName;
@@ -56,11 +56,11 @@ public class NovocationSettings {
     }
 
     public boolean shouldUpdateLocation() {
-        return updateOnLocationChanges;
+        return updateOnLocationChange;
     }
 
-    public void setRefreshOnLocationChange(boolean refreshOnLocationChange) {
-        this.updateOnLocationChanges = refreshOnLocationChange;
+    public void setUpdateOnLocationChange(boolean updateOnLocationChange) {
+        this.updateOnLocationChange = updateOnLocationChange;
     }
 
     public boolean shouldEnablePassiveUpdates() {
@@ -71,46 +71,46 @@ public class NovocationSettings {
         this.enablePassiveUpdates = enablePassiveUpdates;
     }
 
-    public long getLocationUpdatesInterval() {
-        return locationUpdatesInterval;
+    public long getUpdatesInterval() {
+        return updatesInterval;
     }
 
-    public void setLocationUpdatesInterval(long locationUpdatesInterval) {
-        this.locationUpdatesInterval = locationUpdatesInterval;
+    public void setUpdatesInterval(long updatesInterval) {
+        this.updatesInterval = updatesInterval;
     }
 
-    public int getLocationUpdatesDistanceDiff() {
-        return locationUpdatesDistanceDiff;
+    public int getUpdatesDistanceDiff() {
+        return updatesDistanceDiff;
     }
 
-    public void setLocationUpdatesDistanceDiff(int locationUpdatesDistanceDiff) {
-        this.locationUpdatesDistanceDiff = locationUpdatesDistanceDiff;
+    public void setUpdatesDistanceDiff(int updatesDistanceDiff) {
+        this.updatesDistanceDiff = updatesDistanceDiff;
     }
 
-    public long getPassiveLocationUpdatesInterval() {
-        return passiveLocationUpdatesInterval;
+    public long getPassiveUpdatesInterval() {
+        return passiveUpdatesInterval;
     }
 
-    public void setPassiveLocationUpdatesInterval(long passiveLocationUpdatesInterval) {
-        this.passiveLocationUpdatesInterval = passiveLocationUpdatesInterval;
+    public void setPassiveUpdatesInterval(long passiveUpdatesInterval) {
+        this.passiveUpdatesInterval = passiveUpdatesInterval;
     }
 
-    public int getPassiveLocatoionUpdatesDistanceDiff() {
-        return passiveLocatoionUpdatesDistanceDiff;
+    public int getPassiveUpdatesDistanceDiff() {
+        return passiveUpdatesDistanceDiff;
     }
 
-    public void setPassiveLocatoionUpdatesDistanceDiff(int passiveLocatoionUpdatesDistanceDiff) {
-        this.passiveLocatoionUpdatesDistanceDiff = passiveLocatoionUpdatesDistanceDiff;
+    public void setPassiveUpdatesDistanceDiff(int passiveUpdatesDistanceDiff) {
+        this.passiveUpdatesDistanceDiff = passiveUpdatesDistanceDiff;
     }
     
     public void saveCurrentSettingsToPreferences(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
         Editor editor = prefs.edit();
-        editor.putBoolean(Constants.SP_KEY_FOLLOW_LOCATION_CHANGES, updateOnLocationChanges);
-        editor.putInt(Constants.SP_KEY_LOCATION_UPDATES_DISTANCE_DIFF, locationUpdatesDistanceDiff);
-        editor.putLong(Constants.SP_KEY_LOCATION_UPDATES_INTERVAL, locationUpdatesInterval);
-        editor.putInt(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_DISTANCE_DIFF, passiveLocatoionUpdatesDistanceDiff);
-        editor.putLong(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_INTERVAL, passiveLocationUpdatesInterval);
+        editor.putBoolean(Constants.SP_KEY_FOLLOW_LOCATION_CHANGES, updateOnLocationChange);
+        editor.putInt(Constants.SP_KEY_LOCATION_UPDATES_DISTANCE_DIFF, updatesDistanceDiff);
+        editor.putLong(Constants.SP_KEY_LOCATION_UPDATES_INTERVAL, updatesInterval);
+        editor.putInt(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_DISTANCE_DIFF, passiveUpdatesDistanceDiff);
+        editor.putLong(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_INTERVAL, passiveUpdatesInterval);
         editor.putBoolean(Constants.SP_KEY_RUN_ONCE, true);
         editor.commit();
     }

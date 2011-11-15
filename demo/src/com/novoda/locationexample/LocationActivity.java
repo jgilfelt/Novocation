@@ -93,12 +93,12 @@ public class LocationActivity extends Activity {
         useGps.setText(getBooleanText(settings.shouldUseGps()));
         updates.setText(getBooleanText(settings.shouldUpdateLocation()));
         passive.setText(getBooleanText(settings.shouldEnablePassiveUpdates()));
-        long updatesMins = TimeUnit.MILLISECONDS.toMinutes(settings.getLocationUpdatesInterval());
+        long updatesMins = TimeUnit.MILLISECONDS.toMinutes(settings.getUpdatesInterval());
         interval.setText(updatesMins + " mins");
-        distance.setText(settings.getLocationUpdatesDistanceDiff() + "m");
-        long passiveUpdateMins = TimeUnit.MILLISECONDS.toMinutes(settings.getPassiveLocationUpdatesInterval());
+        distance.setText(settings.getUpdatesDistanceDiff() + "m");
+        long passiveUpdateMins = TimeUnit.MILLISECONDS.toMinutes(settings.getPassiveUpdatesInterval());
         passiveInterval.setText(passiveUpdateMins + " mins");
-        passiveDistance.setText(settings.getPassiveLocatoionUpdatesDistanceDiff() + "m");
+        passiveDistance.setText(settings.getPassiveUpdatesDistanceDiff() + "m");
     }
     
     private void displayNewLocation(Location freshLocation) {

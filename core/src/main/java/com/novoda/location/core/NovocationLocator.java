@@ -126,8 +126,8 @@ public class NovocationLocator {
             // Get the last known location. This isn't directly affecting the
             // UI, so put it on a worker
             // thread.
-            lastKnownLocationTask = new LastKnownLocationTask(appContext, settings.getLocationUpdatesDistanceDiff(),
-                    settings.getLocationUpdatesInterval());
+            lastKnownLocationTask = new LastKnownLocationTask(appContext, settings.getUpdatesDistanceDiff(),
+                    settings.getUpdatesInterval());
             lastKnownLocationTask.execute();
         }
 
@@ -167,8 +167,8 @@ public class NovocationLocator {
     protected void requestLocationUpdates(Context context) {
 
         // Normal updates while activity is visible.
-        locationUpdateRequester.requestLocationUpdates(settings.getLocationUpdatesInterval(),
-                settings.getLocationUpdatesDistanceDiff(), criteria, locationListenerPendingIntent);
+        locationUpdateRequester.requestLocationUpdates(settings.getUpdatesInterval(),
+                settings.getUpdatesDistanceDiff(), criteria, locationListenerPendingIntent);
 
         // Register a receiver that listens for when the provider I'm using has
         // been disabled.
@@ -209,8 +209,8 @@ public class NovocationLocator {
             // Passive location updates from 3rd party apps when the Activity
             // isn't
             // visible. Only for Android 2.2+.
-            locationUpdateRequester.requestPassiveLocationUpdates(settings.getLocationUpdatesInterval(),
-                    settings.getLocationUpdatesDistanceDiff(), locationListenerPassivePendingIntent);
+            locationUpdateRequester.requestPassiveLocationUpdates(settings.getUpdatesInterval(),
+                    settings.getUpdatesDistanceDiff(), locationListenerPassivePendingIntent);
         }
     }
 
