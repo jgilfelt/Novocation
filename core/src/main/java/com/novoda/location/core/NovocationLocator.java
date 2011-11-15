@@ -114,18 +114,13 @@ public class NovocationLocator {
         // Instantiate a Location Update Requester class based on the available
         // platform version. This will be used to request location updates.
         locationUpdateRequester = PlatformSpecificImplementationFactory.getLocationUpdateRequester(locationManager);
-
         settings.saveCurrentSettingsToPreferences(appContext);
 
         if (currentLocation != null) {
             sendLocationUpdateBroadcast();
-            if (settings.shouldUpdateLocation()) {
-                requestLocationUpdates(appContext);
-            }
         } else {
             // Get the last known location. This isn't directly affecting the
-            // UI, so put it on a worker
-            // thread.
+            // UI, so put it on a worker thread.
             lastKnownLocationTask = new LastKnownLocationTask(appContext, settings.getUpdatesDistanceDiff(),
                     settings.getUpdatesInterval());
             lastKnownLocationTask.execute();

@@ -17,7 +17,6 @@
 package com.novoda.locationexample;
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import com.novoda.locationexample.R;
 import com.novoda.location.core.NovocationLocator;
