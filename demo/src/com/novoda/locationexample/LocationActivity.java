@@ -16,7 +16,7 @@
 
 package com.novoda.locationexample;
 
-import com.novoda.location.R;
+import com.novoda.locationexample.R;
 import com.novoda.location.core.NovocationLocation;
 
 import android.app.Activity;
