@@ -97,10 +97,12 @@ public class LocationFinder {
 
         // Setup the location update Pending Intents
         Intent activeIntent = new Intent(Constants.ACTIVE_LOCATION_UPDATE_ACTION);
+        activeIntent.setPackage(settings.getPackageName());
         locationListenerPendingIntent = PendingIntent.getBroadcast(appContext, 0, activeIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent passiveIntent = new Intent(appContext, PassiveLocationChangedReceiver.class);
+        passiveIntent.setPackage(settings.getPackageName());
         locationListenerPassivePendingIntent = PendingIntent.getBroadcast(appContext, 0, passiveIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 

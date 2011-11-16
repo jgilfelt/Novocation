@@ -25,14 +25,19 @@ public class LocationSettings {
     private String packageName;
     private String updateAction;
     
-    // Defaults
+    // Defaults. Times in milliseconds. Distances in metres.
+    private static final long DEFAULT_INTERVAL = 5 * 60 * 1000;
+    private static final int DEFAULT_DISTANCE = 100;
+    private static final long DEFAULT_INTERVAL_PASSIVE = 15 * 60 * 1000;
+    private static final int DEFAULT_DISTANCE_PASSIVE = 300;
+    
     private boolean useGps = true;
     private boolean updateOnLocationChange = true;
     private boolean enablePassiveUpdates = false;
-    private long updatesInterval = 5 * 60 * 1000; // 5min
-    private int updatesDistance = 100; // 100m
-    private long passiveUpdatesInterval = 15 * 60 * 1000; // 15min
-    private int passiveUpdatesDistance = 300; // 300m
+    private long updatesInterval = DEFAULT_INTERVAL;
+    private int updatesDistance = DEFAULT_DISTANCE;
+    private long passiveUpdatesInterval = DEFAULT_INTERVAL_PASSIVE;
+    private int passiveUpdatesDistance = DEFAULT_DISTANCE_PASSIVE;
     
     public LocationSettings(String packageName, String updateAction) {
         this.packageName = packageName;
