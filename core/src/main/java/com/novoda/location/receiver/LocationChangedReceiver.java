@@ -26,7 +26,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
-import android.util.Log;
 
 /**
  * This Receiver class is used to listen for Broadcast Intents that announce
@@ -41,8 +40,6 @@ public class LocationChangedReceiver extends BroadcastReceiver {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("Novocation", "location change...");
-        
         String locationKey = LocationManager.KEY_LOCATION_CHANGED;
         String providerEnabledKey = LocationManager.KEY_PROVIDER_ENABLED;
         if (intent.hasExtra(providerEnabledKey)) {
