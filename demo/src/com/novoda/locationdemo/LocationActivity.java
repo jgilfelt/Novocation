@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.novoda.locationexample;
+package com.novoda.locationdemo;
 
 import java.util.Date;
 
-import com.novoda.locationexample.R;
+import com.novoda.locationdemo.R;
 import com.novoda.location.core.LocationFinder;
 import com.novoda.location.core.LocationSettings;
 
@@ -55,7 +55,7 @@ public class LocationActivity extends Activity {
         super.onResume();
         // Register broadcast receiver and start location updates.
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Constants.LOCATION_UPDATE_ACTION);
+        filter.addAction(LocationApplication.LOCATION_UPDATE_ACTION);
         registerReceiver(freshLocationReceiver, filter);
         locationFinder.startLocationUpdates();
     }

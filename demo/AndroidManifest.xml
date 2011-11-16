@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest
   xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.novoda.locationexample"
+  package="com.novoda.locationdemo"
   android:versionCode="1"
   android:versionName="1.0">
 
@@ -21,15 +22,16 @@
       </intent-filter>
     </activity>
 
+    <!-- The following receivers and permissions should be included in your 
+      application manifest. -->
+
     <receiver android:name="com.novoda.location.receiver.LocationChangedReceiver">
       <intent-filter>
-        <action
-          android:name="com.novoda.location.ACTIVE_LOCATION_UPDATE_ACTION" />
+        <action android:name="com.novoda.location.ACTIVE_LOCATION_UPDATE_ACTION" />
       </intent-filter>
     </receiver>
 
-    <receiver
-      android:name="com.novoda.location.receiver.PassiveLocationChangedReceiver" />
+    <receiver android:name="com.novoda.location.receiver.PassiveLocationChangedReceiver" />
 
     <receiver
       enabled="false"

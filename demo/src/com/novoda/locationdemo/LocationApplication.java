@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.novoda.locationexample;
+package com.novoda.locationdemo;
 
 import com.novoda.location.core.LocationFinder;
 import com.novoda.location.core.LocationSettings;
@@ -22,6 +22,9 @@ import com.novoda.location.core.LocationSettings;
 import android.app.Application;
 
 public class LocationApplication extends Application {
+    
+    public static final String PACKAGE_NAME = "com.novoda.locationdemo";
+    public static final String LOCATION_UPDATE_ACTION = "com.novoda.locationdemo.action.ACTION_FRESH_LOCATION";
 
     private static LocationFinder locator;
 
@@ -29,15 +32,15 @@ public class LocationApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        LocationSettings settings = new LocationSettings(Constants.PACKAGE_NAME,
-                Constants.LOCATION_UPDATE_ACTION);
+        // Connect the location finder with relevant settings.
+        LocationSettings settings = new LocationSettings(PACKAGE_NAME, LOCATION_UPDATE_ACTION);
         settings.setUpdatesInterval(2 * 60 * 1000);
         settings.setUpdatesDistance(50);
         locator = LocationFinder.getInstance();
         locator.connect(getApplicationContext(), settings);
     }
 
-    public final LocationFinder getLocator() {
+    public LocationFinder getLocator() {
         return locator;
     }
 
