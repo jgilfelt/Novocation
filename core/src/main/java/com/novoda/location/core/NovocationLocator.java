@@ -93,14 +93,7 @@ public class NovocationLocator {
 
     public void startLocationUpdates() {
 
-        // Specify the Criteria to use when requesting location updates while
-        // the application is Active.
-        criteria = new Criteria();
-        if (settings.shouldUseGps()) {
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        } else {
-            criteria.setPowerRequirement(Criteria.POWER_LOW);
-        }
+        createActiveUpdateCriteria();
 
         // Setup the location update Pending Intents
         Intent activeIntent = new Intent(Constants.ACTIVE_LOCATION_UPDATE_ACTION);
@@ -129,6 +122,15 @@ public class NovocationLocator {
         // If we have requested location updates, turn them on here.
         if (settings.shouldUpdateLocation()) {
             requestLocationUpdates(appContext);
+        }
+    }
+
+    private void createActiveUpdateCriteria() {
+        criteria = new Criteria();
+        if (settings.shouldUseGps()) {
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        } else {
+            criteria.setPowerRequirement(Criteria.POWER_LOW);
         }
     }
 
