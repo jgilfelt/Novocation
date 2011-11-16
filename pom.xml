@@ -31,6 +31,12 @@
     </repository>
   </distributionManagement>
 
+  <scm>
+    <url>http://github.com/novoda/Novocation/tree/${scm.branch}</url>
+    <connection>scm:git:git://github.com/novoda/Novocation.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/novoda/Novocation.git</developerConnection>
+  </scm>
+
   <licenses>
     <license>
       <name>Apache 2.0</name>
