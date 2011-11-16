@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.novoda.location</groupId>
     <artifactId>novocation-parent</artifactId>
-    <version>1.0-beta2</version>
+    <version>1.0-beta3-SNAPSHOT</version>
   </parent>
 
   <artifactId>novocation-core</artifactId>
