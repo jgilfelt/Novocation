@@ -8,3 +8,5 @@ target
 .classpath
 **/bin
 bin
+R.java
+project.properties
