@@ -1,6 +1,6 @@
 package com.novoda.location.task;
 
-import com.novoda.location.core.NovocationLocator;
+import com.novoda.location.core.LocationFinder;
 import com.novoda.location.location.ILastLocationFinder;
 import com.novoda.location.location.PlatformSpecificImplementationFactory;
 
@@ -36,7 +36,7 @@ public class LastKnownLocationTask extends AsyncTask<Void, Void, Location> {
     @Override
     protected void onPostExecute(Location lastKnownLocation) {
         if (lastKnownLocation != null) {
-            NovocationLocator.getInstance().setLocation(lastKnownLocation);
+            LocationFinder.getInstance().setLocation(lastKnownLocation);
         }
     }
 

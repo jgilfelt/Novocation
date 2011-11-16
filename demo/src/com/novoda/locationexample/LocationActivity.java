@@ -19,8 +19,8 @@ package com.novoda.locationexample;
 import java.util.Date;
 
 import com.novoda.locationexample.R;
-import com.novoda.location.core.NovocationLocator;
-import com.novoda.location.core.NovocationSettings;
+import com.novoda.location.core.LocationFinder;
+import com.novoda.location.core.LocationSettings;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -36,8 +36,7 @@ import android.widget.TextView;
 
 public class LocationActivity extends Activity {
     
-    private NovocationLocator novocation;
-    private ViewGroup viewGroup;
+    private LocationFinder locationFinder;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,9 +45,8 @@ public class LocationActivity extends Activity {
         
         // Get the reference to the locator object.
         LocationApplication app = (LocationApplication) getApplication();
-        novocation = app.getLocator();
+        locationFinder = app.getLocator();
         
-        viewGroup = (ViewGroup) findViewById(R.id.content);
         displayLocationSettings();
     }
     
@@ -59,14 +57,14 @@ public class LocationActivity extends Activity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.LOCATION_UPDATE_ACTION);
         registerReceiver(freshLocationReceiver, filter);
-        novocation.startLocationUpdates();
+        locationFinder.startLocationUpdates();
     }
     
     @Override
     public void onPause() {
         // Unregister broadcast receiver and stop location updates.
         unregisterReceiver(freshLocationReceiver);
-        novocation.stopLocationUpdates(true);
+        locationFinder.stopLocationUpdates(true);
         super.onPause();
     }
     
@@ -74,12 +72,12 @@ public class LocationActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Get the fresh location and do something with it...
-            displayNewLocation(novocation.getLocation());
+            displayNewLocation(locationFinder.getLocation());
         }  
     };
     
     private void displayLocationSettings() {
-        NovocationSettings settings = novocation.getSettings();
+        LocationSettings settings = locationFinder.getSettings();
         
         TextView useGps = (TextView) findViewById(R.id.val_use_gps);
         TextView updates = (TextView) findViewById(R.id.val_updates);
@@ -93,9 +91,9 @@ public class LocationActivity extends Activity {
         updates.setText(getBooleanText(settings.shouldUpdateLocation()));
         passive.setText(getBooleanText(settings.shouldEnablePassiveUpdates()));
         interval.setText(settings.getUpdatesInterval() / (60 * 1000) + " mins");
-        distance.setText(settings.getUpdatesDistanceDiff() + "m");
+        distance.setText(settings.getUpdatesDistance() + "m");
         passiveInterval.setText(settings.getPassiveUpdatesInterval() / (60 * 1000) + " mins");
-        passiveDistance.setText(settings.getPassiveUpdatesDistanceDiff() + "m");
+        passiveDistance.setText(settings.getPassiveUpdatesDistance() + "m");
     }
     
     private void displayNewLocation(Location freshLocation) {
@@ -113,6 +111,7 @@ public class LocationActivity extends Activity {
         latitude.setText("" + freshLocation.getLatitude());
         longitude.setText("" + freshLocation.getLongitude());
 
+        ViewGroup viewGroup = (ViewGroup) findViewById(R.id.content);
         viewGroup.addView(block);
     }
 

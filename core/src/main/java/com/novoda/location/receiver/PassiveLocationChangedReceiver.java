@@ -24,7 +24,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 
-import com.novoda.location.core.NovocationLocator;
+import com.novoda.location.core.LocationFinder;
 import com.novoda.location.location.LegacyLastLocationFinder;
 import com.novoda.location.util.Util;
 
@@ -47,7 +47,7 @@ public class PassiveLocationChangedReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         
         String key = LocationManager.KEY_LOCATION_CHANGED;
-        NovocationLocator novoLoc = NovocationLocator.getInstance();
+        LocationFinder novoLoc = LocationFinder.getInstance();
         Location location = null;
 
         if (intent.hasExtra(key)) {

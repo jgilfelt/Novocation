@@ -19,7 +19,7 @@
 package com.novoda.location.receiver;
 
 import com.novoda.location.core.Constants;
-import com.novoda.location.core.NovocationLocator;
+import com.novoda.location.core.LocationFinder;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -53,7 +53,7 @@ public class LocationChangedReceiver extends BroadcastReceiver {
         }
         if (intent.hasExtra(locationKey)) {
             Location location = (Location) intent.getExtras().get(locationKey);
-            NovocationLocator.getInstance().setLocation(location);
+            LocationFinder.getInstance().setLocation(location);
         }
     }
 }

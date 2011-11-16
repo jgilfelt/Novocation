@@ -20,7 +20,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-public class NovocationSettings {
+public class LocationSettings {
 
     private String packageName;
     private String updateAction;
@@ -30,11 +30,11 @@ public class NovocationSettings {
     private boolean updateOnLocationChange = true;
     private boolean enablePassiveUpdates = false;
     private long updatesInterval = 5 * 60 * 1000; // 5min
-    private int updatesDistanceDiff = 100; // 100m
+    private int updatesDistance = 100; // 100m
     private long passiveUpdatesInterval = 15 * 60 * 1000; // 15min
-    private int passiveUpdatesDistanceDiff = 300; // 300m
+    private int passiveUpdatesDistance = 300; // 300m
     
-    public NovocationSettings(String packageName, String updateAction) {
+    public LocationSettings(String packageName, String updateAction) {
         this.packageName = packageName;
         this.updateAction = updateAction;
     }
@@ -79,12 +79,12 @@ public class NovocationSettings {
         this.updatesInterval = updatesInterval;
     }
 
-    public int getUpdatesDistanceDiff() {
-        return updatesDistanceDiff;
+    public int getUpdatesDistance() {
+        return updatesDistance;
     }
 
-    public void setUpdatesDistanceDiff(int updatesDistanceDiff) {
-        this.updatesDistanceDiff = updatesDistanceDiff;
+    public void setUpdatesDistance(int updatesDistance) {
+        this.updatesDistance = updatesDistance;
     }
 
     public long getPassiveUpdatesInterval() {
@@ -95,19 +95,19 @@ public class NovocationSettings {
         this.passiveUpdatesInterval = passiveUpdatesInterval;
     }
 
-    public int getPassiveUpdatesDistanceDiff() {
-        return passiveUpdatesDistanceDiff;
+    public int getPassiveUpdatesDistance() {
+        return passiveUpdatesDistance;
     }
 
-    public void setPassiveUpdatesDistanceDiff(int passiveUpdatesDistanceDiff) {
-        this.passiveUpdatesDistanceDiff = passiveUpdatesDistanceDiff;
+    public void setPassiveUpdatesDistance(int passiveUpdatesDistance) {
+        this.passiveUpdatesDistance = passiveUpdatesDistance;
     }
     
     public void savePassiveSettingsToPreferences(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
         Editor editor = prefs.edit();
         editor.putBoolean(Constants.SP_KEY_PASSIVE_LOCATION_CHANGES, enablePassiveUpdates);
-        editor.putInt(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_DISTANCE_DIFF, passiveUpdatesDistanceDiff);
+        editor.putInt(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_DISTANCE_DIFF, passiveUpdatesDistance);
         editor.putLong(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_INTERVAL, passiveUpdatesInterval);
         editor.putBoolean(Constants.SP_KEY_RUN_ONCE, true);
         editor.commit();

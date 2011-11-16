@@ -16,28 +16,28 @@
 
 package com.novoda.locationexample;
 
-import com.novoda.location.core.NovocationLocator;
-import com.novoda.location.core.NovocationSettings;
+import com.novoda.location.core.LocationFinder;
+import com.novoda.location.core.LocationSettings;
 
 import android.app.Application;
 
 public class LocationApplication extends Application {
 
-    private static NovocationLocator locator;
+    private static LocationFinder locator;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        NovocationSettings locationSettings = new NovocationSettings(Constants.PACKAGE_NAME,
+        LocationSettings settings = new LocationSettings(Constants.PACKAGE_NAME,
                 Constants.LOCATION_UPDATE_ACTION);
-        locationSettings.setUpdatesInterval(2 * 60 * 1000);
-        locationSettings.setUpdatesDistanceDiff(50);
-        locator = NovocationLocator.getInstance();
-        locator.connect(getApplicationContext(), locationSettings);
+        settings.setUpdatesInterval(2 * 60 * 1000);
+        settings.setUpdatesDistance(50);
+        locator = LocationFinder.getInstance();
+        locator.connect(getApplicationContext(), settings);
     }
 
-    public final NovocationLocator getLocator() {
+    public final LocationFinder getLocator() {
         return locator;
     }
 
