@@ -16,12 +16,12 @@
 
 package com.novoda.locationdemo;
 
+import roboguice.application.RoboApplication;
+
 import com.novoda.location.core.LocationFinder;
 import com.novoda.location.core.LocationSettings;
 
-import android.app.Application;
-
-public class LocationApplication extends Application {
+public class LocationApplication extends RoboApplication {
     
     public static final String PACKAGE_NAME = "com.novoda.locationdemo";
     public static final String LOCATION_UPDATE_ACTION = "com.novoda.locationdemo.action.ACTION_FRESH_LOCATION";
@@ -34,7 +34,7 @@ public class LocationApplication extends Application {
 
         // Connect the location finder with relevant settings.
         LocationSettings settings = new LocationSettings(PACKAGE_NAME, LOCATION_UPDATE_ACTION);
-        settings.setUpdatesInterval(2 * 60 * 1000);
+        settings.setUpdatesInterval(3 * 60 * 1000);
         settings.setUpdatesDistance(50);
         locator = LocationFinder.getInstance();
         locator.connect(getApplicationContext(), settings);

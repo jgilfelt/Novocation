@@ -92,41 +92,25 @@ public class LocationFinder {
     }
 
     public void startLocationUpdates() {
-
         createActiveUpdateCriteria();
-
-        // Setup the location update Pending Intents
-        Intent activeIntent = new Intent(Constants.ACTIVE_LOCATION_UPDATE_ACTION);
-        activeIntent.setPackage(settings.getPackageName());
-        locationListenerPendingIntent = PendingIntent.getBroadcast(appContext, 0, activeIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Intent passiveIntent = new Intent(appContext, PassiveLocationChangedReceiver.class);
-        passiveIntent.setPackage(settings.getPackageName());
-        locationListenerPassivePendingIntent = PendingIntent.getBroadcast(appContext, 0, passiveIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        // Instantiate a Location Update Requester class based on the available
-        // platform version. This will be used to request location updates.
+        configurePendingIntents();
+        
         locationUpdateRequester = PlatformSpecificImplementationFactory.getLocationUpdateRequester(locationManager);
         settings.savePassiveSettingsToPreferences(appContext);
 
         if (currentLocation != null) {
             sendLocationUpdateBroadcast();
         } else {
-            // Get the last known location. This isn't directly affecting the
-            // UI, so put it on a worker thread.
             lastKnownLocationTask = new LastKnownLocationTask(appContext, settings.getUpdatesDistance(),
                     settings.getUpdatesInterval());
             lastKnownLocationTask.execute();
         }
 
-        // If we have requested location updates, turn them on here.
         if (settings.shouldUpdateLocation()) {
             requestLocationUpdates(appContext);
         }
     }
-
+    
     private void createActiveUpdateCriteria() {
         criteria = new Criteria();
         if (settings.shouldUseGps()) {
@@ -136,29 +120,23 @@ public class LocationFinder {
         }
     }
 
+    private void configurePendingIntents() {
+        Intent activeIntent = new Intent(Constants.ACTIVE_LOCATION_UPDATE_ACTION);
+        activeIntent.setPackage(settings.getPackageName());
+        locationListenerPendingIntent = PendingIntent.getBroadcast(appContext, 0, activeIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent passiveIntent = new Intent(appContext, PassiveLocationChangedReceiver.class);
+        passiveIntent.setPackage(settings.getPackageName());
+        locationListenerPassivePendingIntent = PendingIntent.getBroadcast(appContext, 0, passiveIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
     public void stopLocationUpdates(boolean finishing) {
         if (settings.shouldUpdateLocation()) {
             disableLocationUpdates(settings.shouldEnablePassiveUpdates(), finishing);
         }
     }
-
-    /**
-     * If the Location Provider we're using to receive location updates is
-     * disabled while the app is running, this Receiver will be notified,
-     * allowing us to re-register our Location Receivers using the best
-     * available Location Provider is still available.
-     */
-    protected BroadcastReceiver locProviderDisabledReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            boolean providerDisabled = !intent.getBooleanExtra(LocationManager.KEY_PROVIDER_ENABLED, false);
-            // Re-register the location listeners using the best available
-            // Location Provider.
-            if (providerDisabled) {
-                requestLocationUpdates(context);
-            }
-        }
-    };
 
     /**
      * Start listening for location updates.
@@ -208,6 +186,24 @@ public class LocationFinder {
                     settings.getUpdatesDistance(), locationListenerPassivePendingIntent);
         }
     }
+    
+    /**
+     * If the Location Provider we're using to receive location updates is
+     * disabled while the app is running, this Receiver will be notified,
+     * allowing us to re-register our Location Receivers using the best
+     * available Location Provider is still available.
+     */
+    protected BroadcastReceiver locProviderDisabledReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean providerDisabled = !intent.getBooleanExtra(LocationManager.KEY_PROVIDER_ENABLED, false);
+            // Re-register the location listeners using the best available
+            // Location Provider.
+            if (providerDisabled) {
+                requestLocationUpdates(context);
+            }
+        }
+    };
 
     /**
      * If the best Location Provider (usually GPS) is not available when we
@@ -236,11 +232,9 @@ public class LocationFinder {
 
         @Override
         public void onProviderEnabled(String provider) {
-            // Re-register the location listeners using the better Location
-            // Provider.
+            // Re-register location listeners with better Location Provider.
             requestLocationUpdates(context);
         }
-
     }
 
 }

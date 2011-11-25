@@ -18,11 +18,13 @@ package com.novoda.locationdemo;
 
 import java.util.Date;
 
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
+
 import com.novoda.locationdemo.R;
 import com.novoda.location.core.LocationFinder;
 import com.novoda.location.core.LocationSettings;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,22 +36,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class LocationActivity extends Activity {
-    
+public class LocationActivity extends RoboActivity {
+
+    @InjectView(R.id.val_use_gps) TextView useGps;
+    @InjectView(R.id.val_updates) TextView updates;
+    @InjectView(R.id.val_passive_updates) TextView passive;
+    @InjectView(R.id.val_update_interval) TextView interval;
+    @InjectView(R.id.val_update_distance) TextView distance;
+    @InjectView(R.id.val_passive_interval) TextView passiveInterval;
+    @InjectView(R.id.val_passive_distance) TextView passiveDistance;
+
     private LocationFinder locationFinder;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
+
         // Get the reference to the locator object.
         LocationApplication app = (LocationApplication) getApplication();
         locationFinder = app.getLocator();
-        
+
         displayLocationSettings();
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
@@ -59,7 +69,7 @@ public class LocationActivity extends Activity {
         registerReceiver(freshLocationReceiver, filter);
         locationFinder.startLocationUpdates();
     }
-    
+
     @Override
     public void onPause() {
         // Unregister broadcast receiver and stop location updates.
@@ -67,26 +77,18 @@ public class LocationActivity extends Activity {
         locationFinder.stopLocationUpdates(true);
         super.onPause();
     }
-    
+
     public BroadcastReceiver freshLocationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Get the fresh location and do something with it...
             displayNewLocation(locationFinder.getLocation());
-        }  
+        }
     };
-    
+
     private void displayLocationSettings() {
         LocationSettings settings = locationFinder.getSettings();
-        
-        TextView useGps = (TextView) findViewById(R.id.val_use_gps);
-        TextView updates = (TextView) findViewById(R.id.val_updates);
-        TextView passive = (TextView) findViewById(R.id.val_passive_updates);
-        TextView interval = (TextView) findViewById(R.id.val_update_interval);
-        TextView distance = (TextView) findViewById(R.id.val_update_distance);
-        TextView passiveInterval = (TextView) findViewById(R.id.val_passive_interval);
-        TextView passiveDistance = (TextView) findViewById(R.id.val_passive_distance);
-        
+
         useGps.setText(getBooleanText(settings.shouldUseGps()));
         updates.setText(getBooleanText(settings.shouldUpdateLocation()));
         passive.setText(getBooleanText(settings.shouldEnablePassiveUpdates()));
@@ -95,38 +97,35 @@ public class LocationActivity extends Activity {
         passiveInterval.setText(settings.getPassiveUpdatesInterval() / (60 * 1000) + " mins");
         passiveDistance.setText(settings.getPassiveUpdatesDistance() + "m");
     }
-    
-    private void displayNewLocation(Location freshLocation) {
+
+    private void displayNewLocation(Location newLoc) {
         View block = getLayoutInflater().inflate(R.layout.location_table, null);
-        
+
         TextView time = (TextView) block.findViewById(R.id.val_time);
         TextView accuracy = (TextView) block.findViewById(R.id.val_acc);
         TextView provider = (TextView) block.findViewById(R.id.val_prov);
         TextView latitude = (TextView) block.findViewById(R.id.val_lat);
         TextView longitude = (TextView) block.findViewById(R.id.val_lon);
-        
-        time.setText(getFormattedTime(freshLocation.getTime()));
-        accuracy.setText(freshLocation.getAccuracy() + "m");
-        provider.setText(freshLocation.getProvider());
-        latitude.setText("" + freshLocation.getLatitude());
-        longitude.setText("" + freshLocation.getLongitude());
+
+        time.setText(DateFormat.format("hh:mm:ss", new Date(newLoc.getTime())));
+        accuracy.setText(newLoc.getAccuracy() + "m");
+        provider.setText(newLoc.getProvider());
+        latitude.setText("" + newLoc.getLatitude());
+        longitude.setText("" + newLoc.getLongitude());
+
+        String providerName = newLoc.getProvider();
+        if (providerName.equalsIgnoreCase("network")) {
+            block.setBackgroundResource(R.color.network);
+        } else if (providerName.equalsIgnoreCase("gps")) {
+            block.setBackgroundResource(R.color.gps);
+        }
 
         ViewGroup viewGroup = (ViewGroup) findViewById(R.id.content);
         viewGroup.addView(block);
     }
 
-    private CharSequence getFormattedTime(long ms) {
-        Date locDate = new Date(ms);
-        CharSequence formattedTime = DateFormat.format("hh:mm:ss", locDate);
-        return formattedTime;
-    }
-    
     private String getBooleanText(boolean bool) {
-        if (bool) {
-            return "ON";
-        } else {
-            return "OFF";
-        }
+        return bool ? "ON" : "OFF";
     }
 
 }

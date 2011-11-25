@@ -1,78 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<RelativeLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/location_table"
-  style="@style/Fill.Width"
-  android:paddingBottom="5dp">
-  <TableLayout
-    style="@style/Fill.Width"
-    android:stretchColumns="0"
-    android:padding="5dp"
-    android:background="#444444">
+  style="@style/Fill.Width">
 
-    <TableRow style="@style/Fill.Width">
+  <RelativeLayout
+    style="@style/padded"
+    android:id="@+id/values">
 
-      <TextView
-        style="@style/Wrap"
-        android:text="@string/time">
-      </TextView>
+    <TextView
+      android:id="@+id/val_time"
+      style="@style/update_bold" />
 
-      <TextView
-        android:id="@+id/val_time"
-        style="@style/Wrap">
-      </TextView>
-    </TableRow>
+    <TextView
+      android:id="@+id/val_prov"
+      style="@style/update_big"
+      android:layout_alignParentRight="true" />
 
-    <TableRow style="@style/Fill.Width">
+    <TextView
+      android:id="@+id/val_acc"
+      style="@style/update_big"
+      android:layout_alignParentRight="true"
+      android:layout_below="@id/val_prov" />
 
-      <TextView
-        style="@style/Wrap"
-        android:text="@string/accuracy">
-      </TextView>
+    <TextView
+      android:id="@+id/val_lat"
+      style="@style/update_text"
+      android:layout_below="@id/val_time" />
 
-      <TextView
-        android:id="@+id/val_acc"
-        style="@style/Wrap">
-      </TextView>
-    </TableRow>
+    <TextView
+      android:id="@+id/val_lon"
+      style="@style/update_text"
+      android:layout_below="@id/val_lat" />
+  </RelativeLayout>
 
-    <TableRow style="@style/Fill.Width">
-      <TextView
-        style="@style/Wrap"
-        android:text="@string/provider">
-      </TextView>
+  <View
+    style="@style/spacer"
+    android:layout_below="@id/values" />
 
-      <TextView
-        android:id="@+id/val_prov"
-        style="@style/Wrap">
-      </TextView>
-    </TableRow>
-
-    <TableRow style="@style/Fill.Width">
-
-      <TextView
-        style="@style/Wrap"
-        android:text="@string/latitude">
-      </TextView>
-
-      <TextView
-        android:id="@+id/val_lat"
-        style="@style/Wrap">
-      </TextView>
-    </TableRow>
-
-    <TableRow style="@style/Fill.Width">
-
-      <TextView
-        style="@style/Wrap"
-        android:text="@string/longitude">
-      </TextView>
-
-      <TextView
-        android:id="@+id/val_lon"
-        style="@style/Wrap">
-      </TextView>
-    </TableRow>
-  </TableLayout>
-</LinearLayout>
+</RelativeLayout>
