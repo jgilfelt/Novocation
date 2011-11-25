@@ -1,6 +1,6 @@
 ### Novocation
 
-Novocation is a project to hide Android location logic away in a jar. Most of the code originates from Reto Meier's [Android Protips: A Deep Dive Into Location](http://code.google.com/p/android-protips-location). It's also heaviliy inspired by Stefano Dacchille's AspectJ project [Ignition Location](https://github.com/stefanodacchille/ignition-location).
+Novocation is a project to hide Android location logic away in a jar. Most of the code originates from Reto Meier's [Android Protips: A Deep Dive Into Location](http://code.google.com/p/android-protips-location). It's also heaviliy inspired by Stefano Dacchille's [Ignition Location](https://github.com/stefanodacchille/ignition-location).
 
 ### Usage
 
