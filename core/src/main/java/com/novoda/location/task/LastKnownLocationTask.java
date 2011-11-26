@@ -9,6 +9,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 
 public class LastKnownLocationTask extends AsyncTask<Void, Void, Location> {
+    
     private Context context;
     private ILastLocationFinder lastLocationFinder;
     private int locationUpdateDistanceDiff;
@@ -48,9 +49,8 @@ public class LastKnownLocationTask extends AsyncTask<Void, Void, Location> {
         // Find the last known location, specifying a required accuracy of
         // within the min distance between updates and a required latency of the
         // minimum time required between updates.
-        Location lastKnownLocation = lastLocationFinder.getLastBestLocation(locationUpdateDistanceDiff,
-                System.currentTimeMillis() - locationUpdateInterval);
-        return lastKnownLocation;
+        return lastLocationFinder.getLastBestLocation(locationUpdateDistanceDiff, System.currentTimeMillis()
+                - locationUpdateInterval);
     }
 
     @Override

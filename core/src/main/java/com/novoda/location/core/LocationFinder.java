@@ -74,8 +74,22 @@ public class LocationFinder {
     }
 
     public void setLocation(Location location) {
-        currentLocation = location;
-        sendLocationUpdateBroadcast();
+        if (currentLocation == null || locationUpdateIsValid(location)) {
+            currentLocation = location;
+            sendLocationUpdateBroadcast();
+        }
+    }
+
+    /*
+     * This method provides a temporary fix for the case where an poor, low
+     * accuracy network location updates a very good and recent one.
+     */
+    private boolean locationUpdateIsValid(Location location) {
+        long newTime = location.getTime();
+        long currentTime = currentLocation.getTime();
+        float newAccuracy = location.getAccuracy();
+        float currentAccuracy = currentLocation.getAccuracy();
+        return (newTime - currentTime) < (20 * 1000) && (newAccuracy < currentAccuracy) ? false : true;
     }
 
     private void sendLocationUpdateBroadcast() {
@@ -101,14 +115,18 @@ public class LocationFinder {
         if (currentLocation != null) {
             sendLocationUpdateBroadcast();
         } else {
-            lastKnownLocationTask = new LastKnownLocationTask(appContext, settings.getUpdatesDistance(),
-                    settings.getUpdatesInterval());
-            lastKnownLocationTask.execute();
+            getLastKnownLocation();
         }
 
         if (settings.shouldUpdateLocation()) {
             requestLocationUpdates(appContext);
         }
+    }
+
+    private void getLastKnownLocation() {
+        lastKnownLocationTask = new LastKnownLocationTask(appContext, settings.getUpdatesDistance(),
+                settings.getUpdatesInterval());
+        lastKnownLocationTask.execute();
     }
     
     private void createActiveUpdateCriteria() {

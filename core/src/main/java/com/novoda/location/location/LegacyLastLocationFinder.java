@@ -59,7 +59,6 @@ public class LegacyLastLocationFinder implements ILastLocationFinder {
     criteria.setAccuracy(Criteria.ACCURACY_COARSE);
     this.context = context;
   }
-  
 
   /**
    * Returns the most accurate and timely previously detected location.

@@ -49,8 +49,9 @@ public class LegacyLocationUpdateRequester extends LocationUpdateRequester {
         // Note that we aren't monitoring this provider to check if it becomes
         // disabled - this is handled by the calling Activity.
         String provider = locationManager.getBestProvider(criteria, true);
-        if (provider != null)
+        if (provider != null) {
             locationManager.requestLocationUpdates(provider, minTime, minDistance, pendingIntent);
+        }
     }
 
     /**
