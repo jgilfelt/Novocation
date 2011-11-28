@@ -30,6 +30,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.novoda.location.location.LocationUpdateRequester;
 import com.novoda.location.location.PlatformSpecificImplementationFactory;
@@ -89,7 +90,15 @@ public class LocationFinder {
         long currentTime = currentLocation.getTime();
         float newAccuracy = location.getAccuracy();
         float currentAccuracy = currentLocation.getAccuracy();
-        return (newTime - currentTime) < (20 * 1000) && (newAccuracy < currentAccuracy) ? false : true;
+        return !(withinThreshold(newTime, currentTime) && newAccuracyIsWorse(newAccuracy, currentAccuracy));
+    }
+
+    private boolean newAccuracyIsWorse(float newAccuracy, float currentAccuracy) {
+        return newAccuracy > currentAccuracy;
+    }
+
+    private boolean withinThreshold(long newTime, long currentTime) {
+        return (newTime - currentTime) < (20 * 1000);
     }
 
     private void sendLocationUpdateBroadcast() {
