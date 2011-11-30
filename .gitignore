@@ -10,3 +10,4 @@ target
 bin
 R.java
 project.properties
+**/libs

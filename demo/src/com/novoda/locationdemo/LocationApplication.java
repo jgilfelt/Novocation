@@ -18,8 +18,8 @@ package com.novoda.locationdemo;
 
 import roboguice.application.RoboApplication;
 
-import com.novoda.location.core.LocationFinder;
-import com.novoda.location.core.LocationSettings;
+import com.novoda.location.LocationFinder;
+import com.novoda.location.LocationSettings;
 
 public class LocationApplication extends RoboApplication {
     
@@ -37,7 +37,7 @@ public class LocationApplication extends RoboApplication {
         settings.setUpdatesInterval(3 * 60 * 1000);
         settings.setUpdatesDistance(50);
         locator = LocationFinder.getInstance();
-        locator.connect(getApplicationContext(), settings);
+        locator.prepare(getApplicationContext(), settings);
     }
 
     public LocationFinder getLocator() {

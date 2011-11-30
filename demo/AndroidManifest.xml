@@ -25,30 +25,30 @@
     <!-- The following receivers and permissions should be included in your 
       application manifest. -->
 
-    <receiver android:name="com.novoda.location.receiver.LocationChangedReceiver">
+    <receiver android:name="com.novoda.location.receiver.LocationChanged">
       <intent-filter>
         <action android:name="com.novoda.location.ACTIVE_LOCATION_UPDATE_ACTION" />
       </intent-filter>
     </receiver>
 
-    <receiver android:name="com.novoda.location.receiver.PassiveLocationChangedReceiver" />
+    <receiver android:name="com.novoda.location.receiver.PassiveLocationChanged" />
 
     <receiver
       enabled="false"
-      android:name="com.novoda.location.receiver.ConnectivityChangedReceiver">
+      android:name="com.novoda.location.receiver.UnregisterPassiveListenerOnLostConnectivity">
       <intent-filter>
         <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
       </intent-filter>
     </receiver>
 
-    <receiver android:name="com.novoda.location.receiver.PowerStateChangedReceiver">
+    <receiver android:name="com.novoda.location.receiver.UnregesterPassiveListenerOnLowBattery">
       <intent-filter>
         <action android:name="android.intent.action.ACTION_BATTERY_LOW" />
         <action android:name="android.intent.action.ACTION_BATTERY_OKAY" />
       </intent-filter>
     </receiver>
 
-    <receiver android:name="com.novoda.location.receiver.BootReceiver">
+    <receiver android:name="com.novoda.location.receiver.RestorePassiveListenerBoot">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED" />
       </intent-filter>

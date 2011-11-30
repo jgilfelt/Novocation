@@ -16,14 +16,14 @@
  * Code modified by Novoda, 2011.
  */
 
-package com.novoda.location.location;
-
-import com.novoda.location.core.Constants;
+package com.novoda.location.provider.requester;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.location.Criteria;
 import android.location.LocationManager;
+
+import com.novoda.location.Constants;
 
 /**
  * Provides support for initiating active and passive location updates for all
@@ -31,7 +31,7 @@ import android.location.LocationManager;
  * 
  * Uses broadcast Intents to notify the app of location changes.
  */
-public class LegacyLocationUpdateRequester extends LocationUpdateRequester {
+public class LegacyLocationUpdateRequester extends BaseLocationUpdateRequester {
 
     protected AlarmManager alarmManager;
 
@@ -40,23 +40,18 @@ public class LegacyLocationUpdateRequester extends LocationUpdateRequester {
         this.alarmManager = alarmManager;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void requestLocationUpdates(long minTime, long minDistance, Criteria criteria, PendingIntent pendingIntent) {
+    public void requestActiveLocationUpdates(long minTime, long minDistance, Criteria criteria, PendingIntent pendingIntent) {
         // Prior to Gingerbread we needed to find the best provider manually.
         // Note that we aren't monitoring this provider to check if it becomes
         // disabled - this is handled by the calling Activity.
         String provider = locationManager.getBestProvider(criteria, true);
-        if (provider != null) {
-            locationManager.requestLocationUpdates(provider, minTime, minDistance, pendingIntent);
+        if (provider == null) {
+        	return;
         }
+        locationManager.requestLocationUpdates(provider, minTime, minDistance, pendingIntent);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void requestPassiveLocationUpdates(long minTime, long minDistance, PendingIntent pendingIntent) {
         // Pre-Froyo there was no Passive Location Provider, so instead we will

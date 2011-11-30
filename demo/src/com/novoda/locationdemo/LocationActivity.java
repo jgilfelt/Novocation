@@ -22,8 +22,8 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
 import com.novoda.locationdemo.R;
-import com.novoda.location.core.LocationFinder;
-import com.novoda.location.core.LocationSettings;
+import com.novoda.location.LocationFinder;
+import com.novoda.location.LocationSettings;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -74,7 +74,7 @@ public class LocationActivity extends RoboActivity {
     public void onPause() {
         // Unregister broadcast receiver and stop location updates.
         unregisterReceiver(freshLocationReceiver);
-        locationFinder.stopLocationUpdates(true);
+        locationFinder.stopLocationUpdates();
         super.onPause();
     }
 

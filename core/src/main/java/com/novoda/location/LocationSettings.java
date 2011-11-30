@@ -14,30 +14,20 @@
  * limitations under the License.
  */
 
-package com.novoda.location.core;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+package com.novoda.location;
 
 public class LocationSettings {
 
+    private boolean useGps = Constants.USE_GPS;
+    private boolean updateOnLocationChange = Constants.REFRESH_DATA_ON_LOCATION_CHANGED;
+    private long updatesInterval = Constants.UPDATES_MAX_TIME;
+    private int updatesDistance = Constants.UPDATES_MAX_DISTANCE;
+    private long passiveUpdatesInterval = Constants.DEFAULT_INTERVAL_PASSIVE;
+    private int passiveUpdatesDistance = Constants.DEFAULT_DISTANCE_PASSIVE;
+    private boolean enablePassiveUpdates = Constants.ENABLE_PASSIVE_UPDATES;
+    
     private String packageName;
     private String updateAction;
-    
-    // Defaults. Times in milliseconds. Distances in metres.
-    private static final long DEFAULT_INTERVAL = 5 * 60 * 1000;
-    private static final int DEFAULT_DISTANCE = 100;
-    private static final long DEFAULT_INTERVAL_PASSIVE = 15 * 60 * 1000;
-    private static final int DEFAULT_DISTANCE_PASSIVE = 300;
-    
-    private boolean useGps = true;
-    private boolean updateOnLocationChange = true;
-    private boolean enablePassiveUpdates = false;
-    private long updatesInterval = DEFAULT_INTERVAL;
-    private int updatesDistance = DEFAULT_DISTANCE;
-    private long passiveUpdatesInterval = DEFAULT_INTERVAL_PASSIVE;
-    private int passiveUpdatesDistance = DEFAULT_DISTANCE_PASSIVE;
     
     public LocationSettings(String packageName, String updateAction) {
         this.packageName = packageName;
@@ -106,16 +96,6 @@ public class LocationSettings {
 
     public void setPassiveUpdatesDistance(int passiveUpdatesDistance) {
         this.passiveUpdatesDistance = passiveUpdatesDistance;
-    }
-    
-    public void savePassiveSettingsToPreferences(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
-        Editor editor = prefs.edit();
-        editor.putBoolean(Constants.SP_KEY_PASSIVE_LOCATION_CHANGES, enablePassiveUpdates);
-        editor.putInt(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_DISTANCE_DIFF, passiveUpdatesDistance);
-        editor.putLong(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_INTERVAL, passiveUpdatesInterval);
-        editor.putBoolean(Constants.SP_KEY_RUN_ONCE, true);
-        editor.commit();
     }
 
 }

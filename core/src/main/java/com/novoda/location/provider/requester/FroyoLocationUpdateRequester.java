@@ -16,12 +16,13 @@
  * Code modified by Novoda, 2011.
  */
 
-package com.novoda.location.location;
-
-import com.novoda.location.core.Constants;
+package com.novoda.location.provider.requester;
 
 import android.app.PendingIntent;
+import android.location.Criteria;
 import android.location.LocationManager;
+
+import com.novoda.location.Constants;
 
 /**
  * Provides support for initiating active and passive location updates optimized
@@ -29,15 +30,12 @@ import android.location.LocationManager;
  * 
  * Uses broadcast Intents to notify the app of location changes.
  */
-public class FroyoLocationUpdateRequester extends LocationUpdateRequester {
+public class FroyoLocationUpdateRequester extends BaseLocationUpdateRequester {
 
     public FroyoLocationUpdateRequester(LocationManager locationManager) {
         super(locationManager);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void requestPassiveLocationUpdates(long minTime, long minDistance, PendingIntent pendingIntent) {
         // Froyo introduced the Passive Location Provider, which receives
@@ -45,4 +43,9 @@ public class FroyoLocationUpdateRequester extends LocationUpdateRequester {
         locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, Constants.UPDATES_MAX_TIME,
                 Constants.UPDATES_MAX_DISTANCE, pendingIntent);
     }
+
+	@Override
+	public void requestActiveLocationUpdates(long minTime, long minDistance,
+			Criteria criteria, PendingIntent pendingIntent) {
+	}
 }

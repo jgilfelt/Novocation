@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.novoda.location.location;
+package com.novoda.location.provider;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -31,7 +31,7 @@ import android.location.LocationListener;
  * the current location. The one-shot update should be returned via the
  * Location Listener passed in through setChangedLocationListener.
  */
-public interface ILastLocationFinder {
+public interface LastLocationFinder {
   /**
    * Find the most accurate and timely previously detected location 
    * using all the location providers. Where the last result is beyond
