@@ -4,7 +4,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 
-public abstract class BetterProviderListener implements LocationListener {
+public abstract class LocationProviderListener implements LocationListener {
 
     @Override
     public void onLocationChanged(Location l) {

@@ -26,9 +26,10 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 
-import com.novoda.location.listener.BetterProviderListener;
+import com.novoda.location.listener.LocationProviderListener;
 import com.novoda.location.provider.LocationProviderFactory;
 import com.novoda.location.provider.LocationUpdateManager;
+import com.novoda.location.util.LocationAccuracy;
 import com.novoda.location.util.Log;
 
 public class LocationFinder {
@@ -39,8 +40,10 @@ public class LocationFinder {
     private volatile Location currentLocation;
     private LocationManager locationManager;
     private Criteria criteria;
-    private BetterProviderListener bestInactiveLocationProviderListener;
+    private LocationProviderListener bestLocationListener;
+    private LocationProviderListener networkLocationListener;
     private LocationUpdateManager locationUpdateManager;
+    private LocationAccuracy locationAccuracy = new LocationAccuracy();
     
     private LocationFinder() {
     }
@@ -64,8 +67,7 @@ public class LocationFinder {
     }
 
     public void setLocation(Location location) {
-    	Log.v("setLocation");
-        if (currentLocation != null && !isValidAndAccurateLocation(location)) {
+        if (locationAccuracy.isWorseLocation(location, currentLocation)) {
         	Log.v("location is not valid or is not accurate");
             return;
         }
@@ -80,11 +82,15 @@ public class LocationFinder {
     public void startLocationUpdates() {
     	Log.v("startLocationUpdates");
         createActiveUpdateCriteria();
-        createLocationUpdateSender();
+        createLocationUpdateManager();
         persistSettingsToPreferences();
         sendFirstAvailableLocation();
         startListeningForLocationUpdates();
     }
+
+	private void createLocationUpdateManager() {
+		this.locationUpdateManager = new LocationUpdateManager(settings, criteria, context, locationManager);
+	}
     
 	public void stopLocationUpdates() {
         if (!settings.shouldUpdateLocation()) {
@@ -115,19 +121,39 @@ public class LocationFinder {
     }
 
 	private void requestAccurateProvider(Context context) {
+		Log.v("requestAccurateProvider");
 		String bestProvider = locationManager.getBestProvider(criteria, false);
         String bestAvailableProvider = locationManager.getBestProvider(criteria, true);
+        Log.v("requestAccurateProvider");
         if (bestProvider != null && !bestProvider.equals(bestAvailableProvider)) {
-            bestInactiveLocationProviderListener = new BetterProviderListener() {
-				@Override
-				public void onProviderEnabled(String provider) {
-					startListeningForLocationUpdates();
-				}
-            };
-            locationManager.requestLocationUpdates(bestProvider, 0, 0, bestInactiveLocationProviderListener,
-                    context.getMainLooper());
+            addBestLocationProviderListener(context, bestProvider);
+        }
+        if(LocationManager.GPS_PROVIDER.equals(bestProvider)) {
+        	addNetworkLocationProviderListener(context);
         }
         locationUpdateManager.removePassiveUpdates();
+	}
+
+	private void addBestLocationProviderListener(Context context, String bestProvider) {
+		bestLocationListener = new LocationProviderListener() {
+			@Override
+			public void onProviderEnabled(String provider) {
+				startListeningForLocationUpdates();
+			}
+		};
+		locationManager.requestLocationUpdates(bestProvider, 0, 0, bestLocationListener,
+		        context.getMainLooper());
+	}
+
+	private void addNetworkLocationProviderListener(Context context) {
+		networkLocationListener = new LocationProviderListener() {
+			@Override
+			public void onProviderEnabled(String provider) {
+				startListeningForLocationUpdates();
+			}
+		};
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, networkLocationListener,
+		        context.getMainLooper());
 	}
 
 	private void registerProviderDisabledReceiver(Context c) {
@@ -137,28 +163,14 @@ public class LocationFinder {
     private void stopListeningForLocationUpdates() {
         context.unregisterReceiver(registerDisabledProviderReceiver);
         locationUpdateManager.removeUpdates();
-        if (bestInactiveLocationProviderListener != null) {
-            locationManager.removeUpdates(bestInactiveLocationProviderListener);
+        if (bestLocationListener != null) {
+            locationManager.removeUpdates(bestLocationListener);
+        }
+        if(networkLocationListener != null) {
+        	locationManager.removeUpdates(networkLocationListener);
         }
         locationUpdateManager.stopFecthLastKnownLocation();
         locationUpdateManager.requestPassiveLocationUpdates();
-    }
-    
-
-    private boolean isValidAndAccurateLocation(Location location) {
-        long newTime = location.getTime();
-        long currentTime = currentLocation.getTime();
-        float newAccuracy = location.getAccuracy();
-        float currentAccuracy = currentLocation.getAccuracy();
-        return !(withinThreshold(newTime, currentTime) && isNewAccuracyWorse(newAccuracy, currentAccuracy));
-    }
-
-    private boolean isNewAccuracyWorse(float newAccuracy, float currentAccuracy) {
-        return newAccuracy > currentAccuracy;
-    }
-
-    private boolean withinThreshold(long newTime, long currentTime) {
-        return (newTime - currentTime) < (20 * 1000);
     }
 
     private void sendLocationUpdateBroadcast() {
@@ -173,11 +185,6 @@ public class LocationFinder {
         context.sendBroadcast(broadcast);
         Log.v("LocationFinder broadcast sent");
     }
-
-	private void createLocationUpdateSender() {
-		this.locationUpdateManager = new LocationUpdateManager(settings, 
-				criteria, context, locationManager);
-	}
 	
     private void createActiveUpdateCriteria() {
         criteria = new Criteria();
