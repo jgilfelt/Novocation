@@ -36,9 +36,6 @@ public class LastKnownLocationTask extends AsyncTask<Void, Void, Location> {
     }
 
     protected Location getLastKnownLocation(Context context) {
-        // Find the last known location, specifying a required accuracy of
-        // within the min distance between updates and a required latency of the
-        // minimum time required between updates.
         return lastLocationFinder.getLastBestLocation(locationUpdateDistanceDiff, System.currentTimeMillis()
                 - locationUpdateInterval);
     }

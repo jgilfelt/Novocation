@@ -23,10 +23,13 @@ import android.content.Context;
 import android.location.Criteria;
 
 public interface LocationUpdateRequester {
-  
-  void requestActiveLocationUpdates(long minTime, long minDistance, Criteria criteria, PendingIntent pendingIntent);
-  
-  void requestPassiveLocationUpdates(Context context, PendingIntent pendingIntent);
-  
-  void requestPassiveLocationUpdates(LocationSettings settings, PendingIntent pendingIntent);
+
+	void requestActiveLocationUpdates(long minTime, long minDistance,
+			Criteria criteria, PendingIntent pendingIntent);
+
+	void requestPassiveLocationUpdates(Context context,
+			PendingIntent pendingIntent);
+
+	void requestPassiveLocationUpdates(LocationSettings settings,
+			PendingIntent pendingIntent);
 }
