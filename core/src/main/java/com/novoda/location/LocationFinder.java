@@ -126,10 +126,10 @@ public class LocationFinder {
         String bestAvailableProvider = locationManager.getBestProvider(criteria, true);
         Log.v("requestAccurateProvider");
         if (bestProvider != null && !bestProvider.equals(bestAvailableProvider)) {
+        	if(LocationManager.GPS_PROVIDER.equals(bestProvider)) {
+        		addNetworkLocationProviderListener(context);
+        	}
             addBestLocationProviderListener(context, bestProvider);
-        }
-        if(LocationManager.GPS_PROVIDER.equals(bestProvider)) {
-        	addNetworkLocationProviderListener(context);
         }
         locationUpdateManager.removePassiveUpdates();
 	}
