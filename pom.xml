@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.novoda</groupId>
     <artifactId>android</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
   </parent>
   <groupId>com.novoda.location</groupId>
   <artifactId>novocation-parent</artifactId>
