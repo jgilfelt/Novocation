@@ -24,13 +24,12 @@
       <version>${android.version}</version>
       <scope>provided</scope>
     </dependency>
-    <!-- 
     <dependency>
       <groupId>com.google.android.maps</groupId>
       <artifactId>maps</artifactId>
       <version>${google.android.maps.version}</version>
+      <scope>provided</scope>
     </dependency>
-    -->
     <dependency>
       <groupId>org.roboguice</groupId>
       <artifactId>roboguice</artifactId>

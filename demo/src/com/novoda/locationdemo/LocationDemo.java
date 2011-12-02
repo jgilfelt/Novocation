@@ -21,7 +21,7 @@ import roboguice.application.RoboApplication;
 import com.novoda.location.LocationFinder;
 import com.novoda.location.LocationSettings;
 
-public class LocationApplication extends RoboApplication {
+public class LocationDemo extends RoboApplication {
     
     public static final String PACKAGE_NAME = "com.novoda.locationdemo";
     public static final String LOCATION_UPDATE_ACTION = "com.novoda.locationdemo.action.ACTION_FRESH_LOCATION";
