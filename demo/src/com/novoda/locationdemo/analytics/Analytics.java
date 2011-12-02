@@ -6,7 +6,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class Analytics {
 
-	private static final String ANALYTICS_UID = "UA-5190493-20";
+	private static final String ANALYTICS_UID = "UA-24812858-2";
 
 	private static interface PageView {
 		String locationUpdateList = "/locationUpdateList";
