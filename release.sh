@@ -37,11 +37,11 @@ releasePrepareAndPerform() {
 }
 
 installTag() {
-  mvn -f target/checkout/novocation/demo/pom.xml android:manifest-update clean install -Pnovocation,release
+  mvn -f target/checkout/demo/pom.xml android:manifest-update clean install -Pnovocation,release
 }
 
 copyApkToDesktop() {
-  cp target/checkout/novocation/demo/target/novocation-app-zipped.apk ~/Desktop/novocation.apk
+  cp target/checkout/demo/target/novocation-demo-zipped.apk ~/Desktop/novocation.apk
 }
 
 androidManifestUpdate() {
