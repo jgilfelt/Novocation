@@ -21,6 +21,7 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.Projection;
 import com.novoda.locationdemo.R;
 import com.novoda.locationdemo.activity.location.LocationItemizedOverlay;
+import com.novoda.locationdemo.analytics.Analytics;
 
 public class MapTracking extends RoboMapActivity {
 
@@ -54,6 +55,8 @@ public class MapTracking extends RoboMapActivity {
         mapController.setZoom(17);
         mapOverlays = mapView.getOverlays();
         update();
+        
+        new Analytics(this).trackMapTracking();
     }
     
     private void update() {

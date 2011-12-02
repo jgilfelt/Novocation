@@ -17,8 +17,11 @@
     <activity android:label="@string/app_name" android:name=".activity.MapTracking" android:screenOrientation="portrait">
     </activity>
 
-    <!-- The following receivers and permissions should be included in your 
-      application manifest. -->
+    <!--
+    =============================================================================
+    IMPORTANT PART FOR THE USERS OF THE LIBRARY 
+    ============================================================================= 
+    -->
 
     <receiver android:name="com.novoda.location.receiver.LocationChanged">
       <intent-filter>
@@ -44,6 +47,19 @@
     <receiver android:name="com.novoda.location.receiver.RestorePassiveListenerBoot">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED"/>
+      </intent-filter>
+    </receiver>
+    
+    <!--
+    =============================================================================
+    END IMPORTANT PART FOR THE USERS OF THE LIBRARY 
+    ============================================================================= 
+    -->
+        
+        
+    <receiver android:exported="true" android:name=".analytics.receiver.ReferralReceiver">
+      <intent-filter>
+        <action android:name="com.android.vending.INSTALL_REFERRER"/>
       </intent-filter>
     </receiver>
 

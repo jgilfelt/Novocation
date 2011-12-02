@@ -3,7 +3,7 @@ summary() {
   echo RELEASE PROCESS
   echo 1 mvn release:prepare release:perform -Plocalrelease
   echo 2 mvn -f target/checkout/demo/pom.xml android:manifest-update clean install -Pnovocation,release
-  echo 3 cp target/checkout/novocation/demo/target/novocation-app-zipped.apk ~/Desktop/novocation.apk
+  echo 3 cp target/checkout/demo/target/novocation-demo-zipped.apk ~/Desktop/novocation.apk
   echo 4 mvn android:manifest-update
   echo 5 git commit of changes to the android manifests for new development cycle
 }

@@ -36,6 +36,7 @@ import com.novoda.location.LocationFinder;
 import com.novoda.location.LocationSettings;
 import com.novoda.locationdemo.LocationDemo;
 import com.novoda.locationdemo.R;
+import com.novoda.locationdemo.analytics.Analytics;
 
 public class LocationUpdateList extends RoboActivity {
 
@@ -59,6 +60,8 @@ public class LocationUpdateList extends RoboActivity {
         locationFinder = app.getLocator();
 
         displayLocationSettings();
+        
+        new Analytics(this).trackMapTracking();
     }
 
     @Override
