@@ -1,0 +1,122 @@
+h1. Novocation
+
+Novocation is a project to hide Android location logic away in a jar. Most of the code originates from Reto Meier's [Android Protips: A Deep Dive Into Location](http://code.google.com/p/android-protips-location). It's also heaviliy inspired by Stefano Dacchille's [Ignition Location](https://github.com/stefanodacchille/ignition-location).
+
+h2. How to use the library
+
+h3. Using maven
+
+If you are using maven you need to define the repo and then the dependency
+
+<pre><code><repositories>
+  <repository>
+    <id>public-mvn-repo-releases</id>
+    <url>https://github.com/novoda/public-mvn-repo/raw/master/releases</url>
+  </repository>
+</repositories></code></pre>
+
+<pre><code><dependency>
+  <groupId>com.novoda.location</groupId>
+  <artifactId>novocation-core</artifactId>
+  <version>1.0.2</version>
+</dependency></code></pre>
+
+h3. Direct jar usage
+
+If you don't care about building tool you can just download the jar manually from this link
+
+https://github.com/novoda/public-mvn-repo/raw/master/releases/com/novoda/location/novocation-core/1.0.2/novocation-core-1.0.2.jar
+
+h2. Implementation
+
+h3. Application
+
+In the application you can keep a reference to the location finder in this way :
+
+<pre><code>
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    LocationSettings settings = new LocationSettings(PACKAGE_NAME, LOCATION_UPDATE_ACTION);
+    settings.setUpdatesInterval(3 * 60 * 1000);
+    settings.setUpdatesDistance(50);
+    locator = LocationFinder.getInstance();
+    locator.prepare(getApplicationContext(), settings);
+  }
+</code></pre>
+
+h3. In the Activity using the location
+
+You need to to start the locationFinder in the onResume and stop it in the onPause method. Something similar to:
+
+<pre><code>
+@Override
+public void onResume() {
+  super.onResume();
+  IntentFilter f = new IntentFilter();
+  f.addAction(LocationDemo.LOCATION_UPDATE_ACTION);
+  registerReceiver(freshLocationReceiver, f);
+  locationFinder.startLocationUpdates();
+}
+</code></pre>
+
+<pre><code>
+@Override
+public void onPause() {
+  unregisterReceiver(freshLocationReceiver);
+  locationFinder.stopLocationUpdates();
+  super.onPause();
+}
+</code></pre>
+
+<pre><code>
+public BroadcastReceiver freshLocationReceiver = new BroadcastReceiver() {
+   @Override
+   public void onReceive(Context context, Intent intent) {
+      locationFinder.getLocation();
+   }
+};
+</code></pre>
+
+h3. Manifest
+
+<pre><code>
+<receiver android:name="com.novoda.location.receiver.LocationChanged">
+  <intent-filter>
+    <action android:name="com.novoda.location.ACTIVE_LOCATION_UPDATE_ACTION"/>
+  </intent-filter>
+</receiver>
+
+<receiver android:name="com.novoda.location.receiver.PassiveLocationChanged"/>
+
+<receiver android:name="com.novoda.location.receiver.UnregisterPassiveListenerOnLostConnectivity" enabled="false">
+  <intent-filter>
+    <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+  </intent-filter>
+</receiver>
+
+<receiver android:name="com.novoda.location.receiver.UnregesterPassiveListenerOnLowBattery">
+  <intent-filter>
+    <action android:name="android.intent.action.ACTION_BATTERY_LOW"/>
+    <action android:name="android.intent.action.ACTION_BATTERY_OKAY"/>
+  </intent-filter>
+</receiver>
+
+<receiver android:name="com.novoda.location.receiver.RestorePassiveListenerBoot">
+  <intent-filter>
+    <action android:name="android.intent.action.BOOT_COMPLETED"/>
+  </intent-filter>
+</receiver>
+</code></pre>
+
+h2. License
+
+Novocation is licensed under the [Apache License, Version 2](http://www.apache.org/licenses/LICENSE-2.0.html).
+
+h2. Demo app
+
+If you want to see the capabilities of the library you can try out the [Novocation demo](https://market.android.com/details?id=com.novoda.locationdemo). This will also help us in improving the library as we track with analytics the quality of the position and the time to get it.
+
+h2. Issues
+
+Please report bugs, tell us about your problems or request features by creating issues on GitHub.
