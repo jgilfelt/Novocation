@@ -5,7 +5,8 @@ import com.novoda.location.Constants;
 import android.location.Location;
 
 /*
- * This code is copied from 
+ * This code is copied from
+ * TODO add some sort of google license
  * 
  * http://developer.android.com/guide/topics/location/obtaining-user-location.html
  */

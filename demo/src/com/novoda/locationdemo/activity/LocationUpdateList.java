@@ -17,28 +17,39 @@
 package com.novoda.locationdemo.activity;
 
 import java.util.Date;
+import java.util.List;
 
-import roboguice.activity.RoboActivity;
+import roboguice.activity.RoboMapActivity;
 import roboguice.inject.InjectView;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapController;
+import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
 import com.novoda.location.LocationFinder;
 import com.novoda.location.LocationSettings;
+import com.novoda.location.util.Log;
 import com.novoda.locationdemo.LocationDemo;
 import com.novoda.locationdemo.R;
+import com.novoda.locationdemo.activity.location.AccuracyCircleOverlay;
 import com.novoda.locationdemo.analytics.Analytics;
 
-public class LocationUpdateList extends RoboActivity {
+public class LocationUpdateList extends RoboMapActivity {
 
     @InjectView(R.id.val_use_gps) TextView useGps;
     @InjectView(R.id.val_updates) TextView updates;
@@ -47,48 +58,132 @@ public class LocationUpdateList extends RoboActivity {
     @InjectView(R.id.val_update_distance) TextView distance;
     @InjectView(R.id.val_passive_interval) TextView passiveInterval;
     @InjectView(R.id.val_passive_distance) TextView passiveDistance;
+    @InjectView(R.id.mapView) MapView mapView;
 
+    //========================================================
+    //TODO
     private LocationFinder locationFinder;
+    //========================================================
+    
+    private static final int FEEDBACK_DIALOG = 1;
+    
+	private List<Overlay> mapOverlays;
+	private MapController mapController;
+	private long time;
+	private Location currentLocation;
+	private Analytics analytics;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.location_activity);
+        setContentView(R.layout.location_update_list_activity);
 
+        analytics = new Analytics(this);
+        
+        //========================================================
+        // TODO if you want to use location finder
         // Get the reference to the locator object.
         LocationDemo app = (LocationDemo) getApplication();
         locationFinder = app.getLocator();
-
-        displayLocationSettings();
+        //========================================================
         
-        new Analytics(this).trackMapTracking();
+        displayLocationSettings();
+        mapView.setBuiltInZoomControls(false);
+        mapController = mapView.getController();
+        mapController.setZoom(17);
+        mapOverlays = mapView.getOverlays();        
+        analytics.trackLocationUpdateList();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        
+        //========================================================
+        // TODO
         // Register broadcast receiver and start location updates.
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(LocationDemo.LOCATION_UPDATE_ACTION);
-        registerReceiver(freshLocationReceiver, filter);
+        IntentFilter f = new IntentFilter();
+        f.addAction(LocationDemo.LOCATION_UPDATE_ACTION);
+        registerReceiver(freshLocationReceiver, f);
+        //========================================================
+        
         locationFinder.startLocationUpdates();
+        time = System.currentTimeMillis();
+        currentLocation = null;
     }
 
     @Override
     public void onPause() {
+    	
+    	//========================================================
+    	// TODO
         // Unregister broadcast receiver and stop location updates.
         unregisterReceiver(freshLocationReceiver);
         locationFinder.stopLocationUpdates();
+        //========================================================
+        
+        analytics.trackLocationSuccessOrFailure(currentLocation, time);
         super.onPause();
     }
 
-    public BroadcastReceiver freshLocationReceiver = new BroadcastReceiver() {
+	public BroadcastReceiver freshLocationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Get the fresh location and do something with it...
+        	currentLocation = locationFinder.getLocation();
+        	new Analytics(context).trackLocationReceived(locationFinder.getLocation(), 
+        			currentLocation, time);
             displayNewLocation(locationFinder.getLocation());
+            update(locationFinder.getLocation());
         }
     };
+    
+    protected Dialog onCreateDialog(int id) {
+    	if(FEEDBACK_DIALOG == id) {
+    		return new AlertDialog.Builder(this)
+		          .setTitle("Help us getting better")
+		          .setMessage("Did you get a good location quickly?")
+		          .setCancelable(true)
+		          .setPositiveButton("Yes", new Dialog.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							analytics.trackPositiveFeedback();
+							LocationUpdateList.this.finish();
+						}
+		          })
+		          .setNegativeButton("No", new Dialog.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							analytics.trackNegativeFeedback();
+							LocationUpdateList.this.finish();
+						}
+		          }).create();
+    	}
+    	return super.onCreateDialog(id);
+    };
+    
+	@Override
+	protected boolean isRouteDisplayed() {
+		return false;
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+	    	showDialog(FEEDBACK_DIALOG);
+	    	return false;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+	
+    private void update(Location location) {
+        mapOverlays.clear();
+        int lat = (int)(location.getLatitude() * 1E6); 
+		int lon = (int)(location.getLongitude() * 1E6);
+		final float accuracy = location.getAccuracy();
+		GeoPoint point = new GeoPoint(lat, lon);
+    	mapController.setCenter(point);
+        mapOverlays.add(new AccuracyCircleOverlay(point, accuracy));
+    }
 
     private void displayLocationSettings() {
         LocationSettings settings = locationFinder.getSettings();
@@ -103,6 +198,8 @@ public class LocationUpdateList extends RoboActivity {
     }
 
     private void displayNewLocation(final Location location) {
+    	Log.v("Getting <accuracy,latitude,longitude>: " + location.getAccuracy() + " " + location.getLatitude() +
+    			" " + location.getLongitude());
         View block = getLayoutInflater().inflate(R.layout.location_table, null);
 
         TextView time = (TextView) block.findViewById(R.id.val_time);
@@ -127,15 +224,15 @@ public class LocationUpdateList extends RoboActivity {
         block.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(MapTracking.getIntent(LocationUpdateList.this, location));
+				update(location);
 			}
 		});
         ViewGroup viewGroup = (ViewGroup) findViewById(R.id.content);
-        viewGroup.addView(block);
+        viewGroup.addView(block, 0);
     }
 
     private String getBooleanText(boolean bool) {
         return bool ? "ON" : "OFF";
     }
-
+	
 }

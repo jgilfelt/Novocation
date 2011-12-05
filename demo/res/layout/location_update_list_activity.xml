@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Fill" >
+
+    <com.google.android.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:apiKey="0W7OZSqSeGL1PGW9N4QACLMdtaIfBVzU4e5_-hg"
+        android:clickable="true"
+        android:enabled="true" />
+
+    <!--  android:apiKey="0W7OZSqSeGL2eDdEu5hgjyMD60qFRiU7VNlHy4Q"  -->
+    
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/Fill.Width" >
+        <include layout="@layout/settings_table" />
+    </LinearLayout>
+    
+    <ScrollView
+    	style="@style/Fill.Width"
+    	android:fillViewport="true" >
+        <LinearLayout
+    		style="@style/Fill.Width" 
+    		android:id="@+id/content">
+    
+		</LinearLayout>
+	</ScrollView>
+
+</LinearLayout>

@@ -27,22 +27,32 @@ public class LocationDemo extends RoboApplication {
     public static final String PACKAGE_NAME = "com.novoda.locationdemo";
     public static final String LOCATION_UPDATE_ACTION = "com.novoda.locationdemo.action.ACTION_FRESH_LOCATION";
 
+    //==================================================
+    // TODO
     private static LocationFinder locator;
-
+    //==================================================
+    
     @Override
     public void onCreate() {
         super.onCreate();
+        //==================================================
+        // TODO
         // Connect the location finder with relevant settings.
         LocationSettings settings = new LocationSettings(PACKAGE_NAME, LOCATION_UPDATE_ACTION);
         settings.setUpdatesInterval(3 * 60 * 1000);
         settings.setUpdatesDistance(50);
         locator = LocationFinder.getInstance();
         locator.prepare(getApplicationContext(), settings);
+        //==================================================
+        
         BugSenseHandler.setup(this, "e3cf60f2");
     }
 
+    //==================================================
+    // TODO
     public LocationFinder getLocator() {
         return locator;
     }
+    //==================================================
 
 }

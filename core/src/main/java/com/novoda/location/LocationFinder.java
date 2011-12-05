@@ -124,7 +124,7 @@ public class LocationFinder {
 		Log.v("requestAccurateProvider");
 		String bestProvider = locationManager.getBestProvider(criteria, false);
         String bestAvailableProvider = locationManager.getBestProvider(criteria, true);
-        Log.v("requestAccurateProvider");
+        Log.v("bestProvider : " + bestProvider + " bestAvailableProvider : " + bestAvailableProvider);
         if (bestProvider != null && !bestProvider.equals(bestAvailableProvider)) {
         	if(LocationManager.GPS_PROVIDER.equals(bestProvider)) {
         		addNetworkLocationProviderListener(context);
@@ -203,7 +203,6 @@ public class LocationFinder {
             }
             startListeningForLocationUpdates();
         }
-
     };
     
     private boolean isProviderEnabled(Intent intent) {

@@ -24,11 +24,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
-public class UnregesterPassiveListenerOnLowBattery extends BroadcastReceiver {
+public class UnregisterPassiveListenerOnLowBattery extends BroadcastReceiver {
     
     @Override
     public void onReceive(Context context, Intent intent) {
-    	Log.v("UnregesterPassiveListenerOnLowBattery onReceive");
+    	Log.v("UnregisterPassiveListenerOnLowBattery onReceive");
         int state = PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
         if(isBatteryLow(intent)) {
         	state = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
