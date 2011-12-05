@@ -25,7 +25,7 @@ h3. Direct jar usage
 
 If you don't care about building tool you can just download the jar manually from this link
 
-https://github.com/novoda/public-mvn-repo/raw/master/releases/com/novoda/location/novocation-core/1.0.2/novocation-core-1.0.2.jar
+<a href="https://github.com/novoda/public-mvn-repo/raw/master/releases/com/novoda/location/novocation-core/1.0.2/novocation-core-1.0.2.jar">download jar</a>
 
 h2. Implementation
 
@@ -111,11 +111,11 @@ h3. Manifest
 
 h2. License
 
-Novocation is licensed under the [Apache License, Version 2](http://www.apache.org/licenses/LICENSE-2.0.html).
+Novocation is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>.
 
 h2. Demo app
 
-If you want to see the capabilities of the library you can try out the [Novocation demo](https://market.android.com/details?id=com.novoda.locationdemo). This will also help us in improving the library as we track with analytics the quality of the position and the time to get it.
+If you want to see the capabilities of the library you can try out the <a href="https://market.android.com/details?id=com.novoda.locationdemo">Novocation demo</a>. This will also help us in improving the library as we track with analytics the quality of the position and the time to get it.
 
 h2. Issues
 
