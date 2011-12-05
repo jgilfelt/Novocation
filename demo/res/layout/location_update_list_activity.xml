@@ -6,11 +6,11 @@
         android:id="@+id/mapView"
         android:layout_width="fill_parent"
         android:layout_height="200dp"
-        android:apiKey="0W7OZSqSeGL1PGW9N4QACLMdtaIfBVzU4e5_-hg"
+        android:apiKey="0W7OZSqSeGL2eDdEu5hgjyMD60qFRiU7VNlHy4Q"
         android:clickable="true"
         android:enabled="true" />
 
-    <!--  android:apiKey="0W7OZSqSeGL2eDdEu5hgjyMD60qFRiU7VNlHy4Q"  -->
+    <!--  android:apiKey="0W7OZSqSeGL1PGW9N4QACLMdtaIfBVzU4e5_-hg"  -->
     
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
