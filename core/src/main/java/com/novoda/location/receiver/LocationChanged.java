@@ -18,15 +18,15 @@
 
 package com.novoda.location.receiver;
 
-import com.novoda.location.Constants;
-import com.novoda.location.LocationFinder;
-import com.novoda.location.util.Log;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+
+import com.novoda.location.Constants;
+import com.novoda.location.LocatorFactory;
+import com.novoda.location.util.Log;
 
 public class LocationChanged extends BroadcastReceiver {
 
@@ -42,7 +42,7 @@ public class LocationChanged extends BroadcastReceiver {
         }
         if (hasLocationChanged(i)) {
         	Log.v("LocationChanged has location changes");
-            LocationFinder.getInstance().setLocation(getLocation(i));
+            LocatorFactory.setLocation(getLocation(i));
         }
     }
     

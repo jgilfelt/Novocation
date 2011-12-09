@@ -17,7 +17,7 @@
  * Dacchille's IgnitedLocation.
  */
 
-package com.novoda.location;
+package com.novoda.location.locator;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,6 +26,9 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 
+import com.novoda.location.Constants;
+import com.novoda.location.Locator;
+import com.novoda.location.Settings;
 import com.novoda.location.exception.NoProviderAvailable;
 import com.novoda.location.listener.LocationProviderListener;
 import com.novoda.location.provider.LocationProviderFactory;
@@ -33,12 +36,11 @@ import com.novoda.location.provider.LocationUpdateManager;
 import com.novoda.location.util.LocationAccuracy;
 import com.novoda.location.util.Log;
 
-public class LocationFinder {
+public class DefaultLocator implements Locator {
 
-	private static LocationFinder instance; 
+	private volatile Location currentLocation;
     private Context context;
-    private LocationSettings settings;
-    private volatile Location currentLocation;
+    private Settings settings;
     private LocationManager locationManager;
     private Criteria criteria;
     private LocationProviderListener bestLocationListener;
@@ -46,27 +48,20 @@ public class LocationFinder {
     private LocationUpdateManager locationUpdateManager;
     private LocationAccuracy locationAccuracy = new LocationAccuracy();
     
-    private LocationFinder() {
-    }
-    
-    public static LocationFinder getInstance() {
-    	if(instance == null)  {
-    		instance = new LocationFinder();
-    	}
-    	return instance;
-    }
-    
-    public void prepare(Context c, LocationSettings settings) {
+    @Override
+    public void prepare(Context c, Settings settings) {
     	Log.v("preparing settings");
         this.context = c;
         this.settings = settings;
         this.locationManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
     }
 
+    @Override
     public Location getLocation() {
         return currentLocation;
     }
 
+    @Override
     public void setLocation(Location location) {
         if (locationAccuracy.isWorseLocation(location, currentLocation)) {
         	Log.v("location is not valid or is not accurate");
@@ -76,10 +71,12 @@ public class LocationFinder {
         sendLocationUpdateBroadcast();
     }
     
-    public LocationSettings getSettings() {
+    @Override
+    public Settings getSettings() {
         return settings;
     }
 
+    @Override
     public void startLocationUpdates() throws NoProviderAvailable {
     	Log.v("startLocationUpdates");
         createActiveUpdateCriteria();
@@ -89,12 +86,23 @@ public class LocationFinder {
         startListeningForLocationUpdates();
     }
 
+    @Override
 	public void stopLocationUpdates() {
         if (!settings.shouldUpdateLocation()) {
             return;
         }
         stopListeningForLocationUpdates();
     }
+	
+    @Override
+	public boolean isNetworkProviderEnabled() {
+	    return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+	}
+
+    @Override
+	public boolean isGpsProviderEnabled() {
+	    return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+	}
 	
 	private void createLocationUpdateManager() {
 		this.locationUpdateManager = new LocationUpdateManager(settings, criteria, context, locationManager);

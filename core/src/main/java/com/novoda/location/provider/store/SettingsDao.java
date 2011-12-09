@@ -1,6 +1,6 @@
 package com.novoda.location.provider.store;
 
-import com.novoda.location.LocationSettings;
+import com.novoda.location.Settings;
 
 import android.content.Context;
 
@@ -10,7 +10,7 @@ public interface SettingsDao {
 
 	int getPassiveLocationDistance(Context context);
 
-	void persistSettingsToPreferences(Context context, LocationSettings settings);
+	void persistSettingsToPreferences(Context context, Settings settings);
 
 	boolean isRunOnce(Context context);
 

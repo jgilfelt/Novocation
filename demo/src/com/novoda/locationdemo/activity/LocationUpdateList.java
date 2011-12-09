@@ -36,13 +36,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
-import com.novoda.location.LocationFinder;
-import com.novoda.location.LocationSettings;
+import com.novoda.location.Locator;
+import com.novoda.location.Settings;
+import com.novoda.location.exception.NoProviderAvailable;
 import com.novoda.location.util.Log;
 import com.novoda.locationdemo.LocationDemo;
 import com.novoda.locationdemo.R;
@@ -62,7 +64,7 @@ public class LocationUpdateList extends RoboMapActivity {
 
     //========================================================
     //TODO
-    private LocationFinder locationFinder;
+    private Locator locator;
     //========================================================
     
     private static final int FEEDBACK_DIALOG = 1;
@@ -84,7 +86,7 @@ public class LocationUpdateList extends RoboMapActivity {
         // TODO if you want to use location finder
         // Get the reference to the locator object.
         LocationDemo app = (LocationDemo) getApplication();
-        locationFinder = app.getLocator();
+        locator = app.getLocator();
         //========================================================
         
         displayLocationSettings();
@@ -105,9 +107,15 @@ public class LocationUpdateList extends RoboMapActivity {
         IntentFilter f = new IntentFilter();
         f.addAction(LocationDemo.LOCATION_UPDATE_ACTION);
         registerReceiver(freshLocationReceiver, f);
+        
+        try {
+        	locator.startLocationUpdates();
+        } catch (NoProviderAvailable npa) {
+        	analytics.trackNoProviderAvailable();
+        	Toast.makeText(this, "No provider available", Toast.LENGTH_LONG).show();
+        }
         //========================================================
         
-        locationFinder.startLocationUpdates();
         time = System.currentTimeMillis();
         currentLocation = null;
     }
@@ -119,7 +127,7 @@ public class LocationUpdateList extends RoboMapActivity {
     	// TODO
         // Unregister broadcast receiver and stop location updates.
         unregisterReceiver(freshLocationReceiver);
-        locationFinder.stopLocationUpdates();
+        locator.stopLocationUpdates();
         //========================================================
         
         analytics.trackLocationSuccessOrFailure(currentLocation, time);
@@ -129,11 +137,11 @@ public class LocationUpdateList extends RoboMapActivity {
 	public BroadcastReceiver freshLocationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-        	currentLocation = locationFinder.getLocation();
-        	new Analytics(context).trackLocationReceived(locationFinder.getLocation(), 
+        	currentLocation = locator.getLocation();
+        	new Analytics(context).trackLocationReceived(locator.getLocation(), 
         			currentLocation, time);
-            displayNewLocation(locationFinder.getLocation());
-            update(locationFinder.getLocation());
+            displayNewLocation(locator.getLocation());
+            update(locator.getLocation());
         }
     };
     
@@ -186,7 +194,7 @@ public class LocationUpdateList extends RoboMapActivity {
     }
 
     private void displayLocationSettings() {
-        LocationSettings settings = locationFinder.getSettings();
+        Settings settings = locator.getSettings();
 
         useGps.setText(getBooleanText(settings.shouldUseGps()));
         updates.setText(getBooleanText(settings.shouldUpdateLocation()));

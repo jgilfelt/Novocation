@@ -9,7 +9,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 
 import com.novoda.location.Constants;
-import com.novoda.location.LocationSettings;
+import com.novoda.location.Settings;
 import com.novoda.location.exception.NoProviderAvailable;
 import com.novoda.location.provider.task.LastKnownLocationTask;
 import com.novoda.location.receiver.PassiveLocationChanged;
@@ -21,12 +21,12 @@ public class LocationUpdateManager {
     private PendingIntent locationListenerPendingIntent;
     private PendingIntent locationListenerPassivePendingIntent;
     private LocationManager locationManager;
-    private LocationSettings settings;
+    private Settings settings;
     private Criteria criteria;
     private LocationProviderFactory locationProviderFactory = new LocationProviderFactory();
     private AsyncTask<Void, Void, Location> lastKnownLocationTask;
     
-    public LocationUpdateManager(LocationSettings settings, Criteria criteria, Context context, LocationManager locationManager) {
+    public LocationUpdateManager(Settings settings, Criteria criteria, Context context, LocationManager locationManager) {
     	this.settings = settings;
     	this.criteria = criteria;
     	this.locationManager = locationManager;
@@ -35,8 +35,12 @@ public class LocationUpdateManager {
     }
     
 	public void requestActiveLocationUpdates() throws NoProviderAvailable {
-		locationUpdateRequester.requestActiveLocationUpdates(settings.getUpdatesInterval(),
+		try { 
+			locationUpdateRequester.requestActiveLocationUpdates(settings.getUpdatesInterval(),
                 settings.getUpdatesDistance(), criteria, locationListenerPendingIntent);
+		} catch(IllegalArgumentException iae) {
+			throw new NoProviderAvailable();
+		}
 	}
 
 	public void requestPassiveLocationUpdates() {

@@ -24,7 +24,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 
-import com.novoda.location.LocationFinder;
+import com.novoda.location.LocatorFactory;
 import com.novoda.location.provider.LocationProviderFactory;
 import com.novoda.location.provider.finder.LegacyLastLocationFinder;
 import com.novoda.location.provider.store.SettingsDao;
@@ -67,7 +67,7 @@ public class PassiveLocationChanged extends BroadcastReceiver {
     }
 
 	private void verifyAndUpdateLocation(Location location, int locationUpdateDistanceDiff, long delta) {
-		Location currentLocation = LocationFinder.getInstance().getLocation();
+		Location currentLocation = LocatorFactory.getLocation();
 		if ((currentLocation != null && currentLocation.getTime() > delta)
 		        || (currentLocation.distanceTo(location) < locationUpdateDistanceDiff)) {
 			return;
@@ -75,13 +75,13 @@ public class PassiveLocationChanged extends BroadcastReceiver {
 		if (location == null) {
 			return;
 		}
-		LocationFinder.getInstance().setLocation(location);
+		LocatorFactory.setLocation(location);
 	}
 
 	private void updateLocation(Location location) {
 		if (location == null) {
 			return;
 		}
-		LocationFinder.getInstance().setLocation(location);
+		LocatorFactory.setLocation(location);
 	}
 }

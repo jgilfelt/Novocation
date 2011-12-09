@@ -23,7 +23,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import com.novoda.location.Constants;
-import com.novoda.location.LocationSettings;
+import com.novoda.location.Settings;
 
 public class SharedPreferenceSettingsDao implements SettingsDao {
 
@@ -40,7 +40,7 @@ public class SharedPreferenceSettingsDao implements SettingsDao {
     }
 
     @Override
-    public void persistSettingsToPreferences(Context context, LocationSettings settings) {
+    public void persistSettingsToPreferences(Context context, Settings settings) {
         SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
         Editor editor = prefs.edit();
         editor.putBoolean(Constants.SP_KEY_PASSIVE_LOCATION_CHANGES, settings.shouldEnablePassiveUpdates());

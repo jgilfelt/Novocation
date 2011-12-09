@@ -72,6 +72,10 @@ public class Analytics {
 	public void trackPositiveFeedback() {
 		trackPageView("/positiveFeedback");
 	}
+	
+	public void trackNoProviderAvailable() {
+		trackPageView("/noProviderAvailable");
+	}
 
 	private boolean isFailure(Location location, long deltaTimeToGetLocation) {
 		return deltaTimeToGetLocation < 2*60*1000 && location.getAccuracy() > 200;

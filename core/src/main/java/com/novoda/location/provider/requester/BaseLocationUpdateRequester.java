@@ -1,6 +1,6 @@
 package com.novoda.location.provider.requester;
 
-import com.novoda.location.LocationSettings;
+import com.novoda.location.Settings;
 import com.novoda.location.provider.LocationProviderFactory;
 import com.novoda.location.provider.LocationUpdateRequester;
 import com.novoda.location.provider.store.SettingsDao;
@@ -26,7 +26,7 @@ public abstract class BaseLocationUpdateRequester implements LocationUpdateReque
 	}
 	
 	@Override
-	public void requestPassiveLocationUpdates(LocationSettings settings, PendingIntent pendingIntent) {
+	public void requestPassiveLocationUpdates(Settings settings, PendingIntent pendingIntent) {
 		requestPassiveLocationUpdates(settings.getPassiveUpdatesInterval(), settings.getPassiveUpdatesDistance(), pendingIntent);
 	}
 	
