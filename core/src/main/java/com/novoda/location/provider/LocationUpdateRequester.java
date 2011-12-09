@@ -17,6 +17,7 @@
 package com.novoda.location.provider;
 
 import com.novoda.location.LocationSettings;
+import com.novoda.location.exception.NoProviderAvailable;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -25,7 +26,7 @@ import android.location.Criteria;
 public interface LocationUpdateRequester {
 
 	void requestActiveLocationUpdates(long minTime, long minDistance,
-			Criteria criteria, PendingIntent pendingIntent);
+			Criteria criteria, PendingIntent pendingIntent) throws NoProviderAvailable;
 
 	void requestPassiveLocationUpdates(Context context,
 			PendingIntent pendingIntent);

@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 
 import com.novoda.location.Constants;
 import com.novoda.location.LocationSettings;
+import com.novoda.location.exception.NoProviderAvailable;
 import com.novoda.location.provider.task.LastKnownLocationTask;
 import com.novoda.location.receiver.PassiveLocationChanged;
 import com.novoda.location.util.ApiLevelDetector;
@@ -33,7 +34,7 @@ public class LocationUpdateManager {
     	configurePendingIntents(context);
     }
     
-	public void requestActiveLocationUpdates() {
+	public void requestActiveLocationUpdates() throws NoProviderAvailable {
 		locationUpdateRequester.requestActiveLocationUpdates(settings.getUpdatesInterval(),
                 settings.getUpdatesDistance(), criteria, locationListenerPendingIntent);
 	}

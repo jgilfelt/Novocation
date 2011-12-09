@@ -26,6 +26,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 
+import com.novoda.location.exception.NoProviderAvailable;
 import com.novoda.location.listener.LocationProviderListener;
 import com.novoda.location.provider.LocationProviderFactory;
 import com.novoda.location.provider.LocationUpdateManager;
@@ -79,7 +80,7 @@ public class LocationFinder {
         return settings;
     }
 
-    public void startLocationUpdates() {
+    public void startLocationUpdates() throws NoProviderAvailable {
     	Log.v("startLocationUpdates");
         createActiveUpdateCriteria();
         createLocationUpdateManager();
@@ -88,16 +89,16 @@ public class LocationFinder {
         startListeningForLocationUpdates();
     }
 
-	private void createLocationUpdateManager() {
-		this.locationUpdateManager = new LocationUpdateManager(settings, criteria, context, locationManager);
-	}
-    
 	public void stopLocationUpdates() {
         if (!settings.shouldUpdateLocation()) {
             return;
         }
         stopListeningForLocationUpdates();
     }
+	
+	private void createLocationUpdateManager() {
+		this.locationUpdateManager = new LocationUpdateManager(settings, criteria, context, locationManager);
+	}
 
 	private void persistSettingsToPreferences() {
 		new LocationProviderFactory().getSettingsDao().persistSettingsToPreferences(context, settings);
@@ -111,7 +112,7 @@ public class LocationFinder {
 		sendLocationUpdateBroadcast();
 	}
     
-    private void startListeningForLocationUpdates() {
+    private void startListeningForLocationUpdates() throws NoProviderAvailable {
     	if (!settings.shouldUpdateLocation()) {
     		return;
     	}
@@ -135,23 +136,13 @@ public class LocationFinder {
 	}
 
 	private void addBestLocationProviderListener(Context context, String bestProvider) {
-		bestLocationListener = new LocationProviderListener() {
-			@Override
-			public void onProviderEnabled(String provider) {
-				startListeningForLocationUpdates();
-			}
-		};
+		bestLocationListener = new CustomLocationProviderListener();
 		locationManager.requestLocationUpdates(bestProvider, 0, 0, bestLocationListener,
 		        context.getMainLooper());
 	}
 
 	private void addNetworkLocationProviderListener(Context context) {
-		networkLocationListener = new LocationProviderListener() {
-			@Override
-			public void onProviderEnabled(String provider) {
-				startListeningForLocationUpdates();
-			}
-		};
+		networkLocationListener = new CustomLocationProviderListener();
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, networkLocationListener,
 		        context.getMainLooper());
 	}
@@ -201,12 +192,27 @@ public class LocationFinder {
             if (isProviderEnabled(intent)) {
             	return;
             }
-            startListeningForLocationUpdates();
+            startListeningForLocationUpdatesSilently();
         }
     };
     
     private boolean isProviderEnabled(Intent intent) {
     	return intent.getBooleanExtra(LocationManager.KEY_PROVIDER_ENABLED, false);
     }
+    
+    private class CustomLocationProviderListener extends LocationProviderListener {
+		@Override
+		public void onProviderEnabled(String provider) {
+			startListeningForLocationUpdatesSilently();
+		}
+	};
+	
+	private void startListeningForLocationUpdatesSilently() {
+		try {
+			startListeningForLocationUpdates();
+		} catch (NoProviderAvailable npa) {
+			
+		}
+	}
 
 }
