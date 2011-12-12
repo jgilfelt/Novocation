@@ -43,7 +43,7 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.novoda.location.Locator;
-import com.novoda.location.Settings;
+import com.novoda.location.LocatorSettings;
 import com.novoda.location.exception.NoProviderAvailable;
 import com.novoda.location.util.Log;
 import com.novoda.locationdemo.LocationDemo;
@@ -194,7 +194,7 @@ public class LocationUpdateList extends RoboMapActivity {
     }
 
     private void displayLocationSettings() {
-        Settings settings = locator.getSettings();
+        LocatorSettings settings = locator.getSettings();
 
         useGps.setText(getBooleanText(settings.shouldUseGps()));
         updates.setText(getBooleanText(settings.shouldUpdateLocation()));

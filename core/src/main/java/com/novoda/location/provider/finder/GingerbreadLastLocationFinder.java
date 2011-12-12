@@ -74,7 +74,7 @@ public class GingerbreadLastLocationFinder implements LastLocationFinder {
 			if (location != null) {
 				float accuracy = location.getAccuracy();
 				long time = location.getTime();
-				if ((time > minTime && accuracy < bestAccuracy)) {
+				if (time > minTime && accuracy < bestAccuracy) {
 					bestResult = location;
 					bestAccuracy = accuracy;
 					bestTime = time;
@@ -125,5 +125,10 @@ public class GingerbreadLastLocationFinder implements LastLocationFinder {
 	@Override
 	public void cancel() {
 		locationManager.removeUpdates(singleUpatePI);
+		try {
+			context.unregisterReceiver(singleUpdateReceiver);
+		} catch(Exception e) {
+			//In case it has not been unregister in onReceive
+		}
 	}
 }

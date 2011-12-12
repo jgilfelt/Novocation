@@ -20,7 +20,7 @@ import roboguice.application.RoboApplication;
 
 import com.bugsense.trace.BugSenseHandler;
 import com.novoda.location.LocatorFactory;
-import com.novoda.location.Settings;
+import com.novoda.location.LocatorSettings;
 import com.novoda.location.Locator;
 
 public class LocationDemo extends RoboApplication {
@@ -39,7 +39,7 @@ public class LocationDemo extends RoboApplication {
         //==================================================
         // TODO
         // Connect the location finder with relevant settings.
-        Settings settings = new Settings(PACKAGE_NAME, LOCATION_UPDATE_ACTION);
+        LocatorSettings settings = new LocatorSettings(PACKAGE_NAME, LOCATION_UPDATE_ACTION);
         settings.setUpdatesInterval(3 * 60 * 1000);
         settings.setUpdatesDistance(50);
         locator = LocatorFactory.getInstance();

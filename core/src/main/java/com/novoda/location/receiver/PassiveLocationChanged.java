@@ -28,13 +28,11 @@ import com.novoda.location.LocatorFactory;
 import com.novoda.location.provider.LocationProviderFactory;
 import com.novoda.location.provider.finder.LegacyLastLocationFinder;
 import com.novoda.location.provider.store.SettingsDao;
-import com.novoda.location.util.Log;
 
 public class PassiveLocationChanged extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-    	Log.v("PassiveLocationChanged onReceive");
         String key = LocationManager.KEY_LOCATION_CHANGED;
         Location location = null;
         if (intent.hasExtra(key)) {

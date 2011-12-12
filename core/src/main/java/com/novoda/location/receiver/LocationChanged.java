@@ -26,22 +26,18 @@ import android.location.LocationManager;
 
 import com.novoda.location.Constants;
 import com.novoda.location.LocatorFactory;
-import com.novoda.location.util.Log;
 
 public class LocationChanged extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent i) {
-    	Log.v("LocationChanged onReceive");
     	if(i == null) {
     		return;
     	}
         if (isProviderNotEnabled(i)) {
-        	Log.v("LocationChanged provider not enabled");
             context.sendBroadcast(Constants.LOCATION_UPDATE_PROVIDER_DISABLED);
         }
         if (hasLocationChanged(i)) {
-        	Log.v("LocationChanged has location changes");
             LocatorFactory.setLocation(getLocation(i));
         }
     }

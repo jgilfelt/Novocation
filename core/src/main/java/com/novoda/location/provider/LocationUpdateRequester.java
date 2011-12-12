@@ -16,7 +16,7 @@
 
 package com.novoda.location.provider;
 
-import com.novoda.location.Settings;
+import com.novoda.location.LocatorSettings;
 import com.novoda.location.exception.NoProviderAvailable;
 
 import android.app.PendingIntent;
@@ -31,6 +31,8 @@ public interface LocationUpdateRequester {
 	void requestPassiveLocationUpdates(Context context,
 			PendingIntent pendingIntent);
 
-	void requestPassiveLocationUpdates(Settings settings,
+	void requestPassiveLocationUpdates(LocatorSettings settings,
 			PendingIntent pendingIntent);
+	
+	void removeLocationUpdates(PendingIntent pendingIntent);
 }

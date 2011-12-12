@@ -7,13 +7,13 @@ import android.location.Location;
 
 public interface Locator {
 
-	void prepare(Context c, Settings settings);
+	void prepare(Context c, LocatorSettings settings);
 
 	Location getLocation();
 
 	void setLocation(Location location);
 
-	Settings getSettings();
+	LocatorSettings getSettings();
 
 	void startLocationUpdates() throws NoProviderAvailable;
 

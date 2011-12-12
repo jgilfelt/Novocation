@@ -1,6 +1,6 @@
 package com.novoda.location.provider.requester;
 
-import com.novoda.location.Settings;
+import com.novoda.location.LocatorSettings;
 import com.novoda.location.provider.LocationProviderFactory;
 import com.novoda.location.provider.LocationUpdateRequester;
 import com.novoda.location.provider.store.SettingsDao;
@@ -26,9 +26,18 @@ public abstract class BaseLocationUpdateRequester implements LocationUpdateReque
 	}
 	
 	@Override
-	public void requestPassiveLocationUpdates(Settings settings, PendingIntent pendingIntent) {
+	public void requestPassiveLocationUpdates(LocatorSettings settings, PendingIntent pendingIntent) {
 		requestPassiveLocationUpdates(settings.getPassiveUpdatesInterval(), settings.getPassiveUpdatesDistance(), pendingIntent);
 	}
 	
 	protected abstract void requestPassiveLocationUpdates(long minTime, long minDistance, PendingIntent pendingIntent);
+
+	@Override
+	public void removeLocationUpdates(PendingIntent pendingIntent) {
+		try {
+			locationManager.removeUpdates(pendingIntent);
+		} catch (IllegalArgumentException e) {
+			
+		}
+	}
 }

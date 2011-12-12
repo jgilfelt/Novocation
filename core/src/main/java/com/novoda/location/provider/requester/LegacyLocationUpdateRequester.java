@@ -63,4 +63,9 @@ public class LegacyLocationUpdateRequester extends BaseLocationUpdateRequester {
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, System.currentTimeMillis()
                 + Constants.UPDATES_MAX_TIME, Constants.UPDATES_MAX_TIME, pendingIntent);
     }
+
+	@Override
+	public void removeLocationUpdates(PendingIntent pendingIntent) {
+		//Not needed
+	}
 }

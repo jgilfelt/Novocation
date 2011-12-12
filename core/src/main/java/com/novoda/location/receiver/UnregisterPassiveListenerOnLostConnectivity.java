@@ -18,8 +18,6 @@
 
 package com.novoda.location.receiver;
 
-import com.novoda.location.util.Log;
-
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -32,7 +30,6 @@ public class UnregisterPassiveListenerOnLostConnectivity extends BroadcastReceiv
 	
     @Override
     public void onReceive(Context c, Intent intent) {
-    	Log.v("onReceive UnregisterPassiveListenerOnLostConnectivity");
         if (isNotConnected(c)) {
         	return;
         }

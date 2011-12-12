@@ -16,8 +16,6 @@
 
 package com.novoda.location.receiver;
 
-import com.novoda.location.util.Log;
-
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -28,7 +26,6 @@ public class UnregisterPassiveListenerOnLowBattery extends BroadcastReceiver {
     
     @Override
     public void onReceive(Context context, Intent intent) {
-    	Log.v("UnregisterPassiveListenerOnLowBattery onReceive");
         int state = PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
         if(isBatteryLow(intent)) {
         	state = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;

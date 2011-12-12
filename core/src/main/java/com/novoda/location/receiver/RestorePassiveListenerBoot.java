@@ -27,13 +27,11 @@ import android.location.LocationManager;
 import com.novoda.location.provider.LocationProviderFactory;
 import com.novoda.location.provider.LocationUpdateRequester;
 import com.novoda.location.provider.store.SettingsDao;
-import com.novoda.location.util.Log;
 
 public class RestorePassiveListenerBoot extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context c, Intent intent) {
-    	Log.v("RestorePassiveListenerBoot onReceive");
     	SettingsDao settingsDao = new LocationProviderFactory().getSettingsDao();
         if (!settingsDao.isRunOnce(c)) {
         	return;

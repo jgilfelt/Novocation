@@ -16,7 +16,7 @@
 
 package com.novoda.location;
 
-public class Settings {
+public class LocatorSettings {
 
     private boolean useGps = Constants.USE_GPS;
     private boolean updateOnLocationChange = Constants.REFRESH_DATA_ON_LOCATION_CHANGED;
@@ -29,7 +29,7 @@ public class Settings {
     private String packageName;
     private String updateAction;
     
-    public Settings(String packageName, String updateAction) {
+    public LocatorSettings(String packageName, String updateAction) {
         this.packageName = packageName;
         this.updateAction = updateAction;
     }
