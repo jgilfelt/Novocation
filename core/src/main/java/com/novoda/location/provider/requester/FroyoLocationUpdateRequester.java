@@ -18,6 +18,10 @@
 
 package com.novoda.location.provider.requester;
 
+import java.util.List;
+
+import com.novoda.location.util.Log;
+
 import android.app.PendingIntent;
 import android.location.Criteria;
 import android.location.LocationManager;
@@ -47,8 +51,12 @@ public class FroyoLocationUpdateRequester extends BaseLocationUpdateRequester {
 	@Override
 	public void requestActiveLocationUpdates(long minTime, long minDistance,
 			Criteria criteria, PendingIntent pendingIntent) {
-		locationManager.requestLocationUpdates(
-				LocationManager.NETWORK_PROVIDER, minTime, (float)minDistance, pendingIntent);
+		List<String> providers = locationManager.getProviders(true);
+		for(String provider : providers) {
+			Log.v("requestActiveLocationUpdates : " + provider);
+			locationManager.requestLocationUpdates(
+				provider, minTime, (float)minDistance, pendingIntent);
+		}
 	}
 
 	
