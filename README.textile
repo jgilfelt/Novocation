@@ -37,7 +37,7 @@ In the application you can keep a reference to the locator in this way :
   @Override
   public void onCreate() {
     super.onCreate();
-    Settings settings = new Settings(PACKAGE_NAME, LOCATION_UPDATE_ACTION);
+    LocatorSettings settings = new LocatorSettings(PACKAGE_NAME, LOCATION_UPDATE_ACTION);
     settings.setUpdatesInterval(3 * 60 * 1000);
     settings.setUpdatesDistance(50);
     locator = LocatorFactory.getInstance();
@@ -101,8 +101,8 @@ h3. Manifest
 
 <receiver android:name="com.novoda.location.receiver.UnregesterPassiveListenerOnLowBattery">
   <intent-filter>
-    <action android:name="android.intent.action.ACTION_BATTERY_LOW"/>
-    <action android:name="android.intent.action.ACTION_BATTERY_OKAY"/>
+    <action android:name="android.intent.action.BATTERY_LOW"/>
+    <action android:name="android.intent.action.BATTERY_OKAY"/>
   </intent-filter>
 </receiver>
 
