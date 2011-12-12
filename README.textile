@@ -18,7 +18,7 @@ If you are using maven you need to define the repo and then the dependency
 <pre><code><dependency>
   <groupId>com.novoda.location</groupId>
   <artifactId>novocation-core</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
 </dependency></code></pre>
 
 h3. Direct jar usage
@@ -31,23 +31,23 @@ h2. Implementation
 
 h3. Application
 
-In the application you can keep a reference to the location finder in this way :
+In the application you can keep a reference to the locator in this way :
 
 <pre><code>
   @Override
   public void onCreate() {
     super.onCreate();
-    LocationSettings settings = new LocationSettings(PACKAGE_NAME, LOCATION_UPDATE_ACTION);
+    Settings settings = new Settings(PACKAGE_NAME, LOCATION_UPDATE_ACTION);
     settings.setUpdatesInterval(3 * 60 * 1000);
     settings.setUpdatesDistance(50);
-    locator = LocationFinder.getInstance();
+    locator = LocatorFactory.getInstance();
     locator.prepare(getApplicationContext(), settings);
   }
 </code></pre>
 
 h3. In the Activity using the location
 
-You need to to start the locationFinder in the onResume and stop it in the onPause method. Something similar to:
+You need to to start the locator in the onResume and stop it in the onPause method. Something similar to:
 
 <pre><code>
 @Override
@@ -56,7 +56,11 @@ public void onResume() {
   IntentFilter f = new IntentFilter();
   f.addAction(LocationDemo.LOCATION_UPDATE_ACTION);
   registerReceiver(freshLocationReceiver, f);
-  locationFinder.startLocationUpdates();
+  try {
+    locator.startLocationUpdates();
+  } catch(NoProviderAvailable np) {
+    //TODO add implementation
+  }
 }
 </code></pre>
 
@@ -64,7 +68,7 @@ public void onResume() {
 @Override
 public void onPause() {
   unregisterReceiver(freshLocationReceiver);
-  locationFinder.stopLocationUpdates();
+  locator.stopLocationUpdates();
   super.onPause();
 }
 </code></pre>
@@ -73,7 +77,7 @@ public void onPause() {
 public BroadcastReceiver freshLocationReceiver = new BroadcastReceiver() {
    @Override
    public void onReceive(Context context, Intent intent) {
-      locationFinder.getLocation();
+      locator.getLocation();
    }
 };
 </code></pre>
