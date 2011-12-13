@@ -34,7 +34,7 @@
       </intent-filter>
     </receiver>
 
-    <receiver android:name="com.novoda.location.receiver.UnregesterPassiveListenerOnLowBattery">
+    <receiver android:name="com.novoda.location.receiver.UnregisterPassiveListenerOnLowBattery">
       <intent-filter>
         <action android:name="android.intent.action.BATTERY_LOW"/>
         <action android:name="android.intent.action.BATTERY_OKAY"/>
