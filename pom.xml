@@ -13,7 +13,7 @@
   <packaging>pom</packaging>
 
   <properties>
-    <android.version>2.3.3</android.version>
+    <android.version>3.2_r1</android.version>
   </properties>
 
   <repositories>
@@ -47,6 +47,7 @@
   <modules>
     <module>core</module>
     <module>demo</module>
+    <module>simple</module>
   </modules>
 
 </project>

@@ -1,70 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="7" android:versionName="1.0.6-SNAPSHOT" package="com.novoda.locationdemo">
+<manifest
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:versionCode="7"
+  android:versionName="1.0.6-SNAPSHOT"
+  package="com.novoda.locationdemo">
 
-  <uses-sdk android:minSdkVersion="7"/>
+  <uses-sdk
+    android:minSdkVersion="7" />
 
-  <application android:debuggable="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:name=".LocationDemo">
-    
-    <uses-library android:name="com.google.android.maps"/>
-      
-    <activity android:label="@string/app_name" android:name=".activity.LocationUpdateList" android:screenOrientation="portrait" android:theme="@android:style/Theme.Black.NoTitleBar">
+  <application
+    android:debuggable="true"
+    android:icon="@drawable/ic_launcher"
+    android:label="@string/app_name"
+    android:name=".LocationDemo">
+
+    <uses-library
+      android:name="com.google.android.maps" />
+
+    <activity
+      android:label="@string/app_name"
+      android:name=".activity.LocationUpdateList"
+      android:screenOrientation="portrait"
+      android:theme="@android:style/Theme.Black.NoTitleBar">
       <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
+        <action
+          android:name="android.intent.action.MAIN" />
+        <category
+          android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
 
     <!--
-    =============================================================================
-    IMPORTANT PART FOR THE USERS OF THE LIBRARY 
-    ============================================================================= 
+      =============================================================================
+      IMPORTANT PART FOR THE USERS OF THE LIBRARY
+      =============================================================================
     -->
 
-    <receiver android:name="com.novoda.location.receiver.LocationChanged">
+    <receiver
+      android:name="com.novoda.location.receiver.LocationChanged">
       <intent-filter>
-        <action android:name="com.novoda.location.ACTIVE_LOCATION_UPDATE_ACTION"/>
+        <action
+          android:name="com.novoda.location.ACTIVE_LOCATION_UPDATE_ACTION" />
       </intent-filter>
     </receiver>
 
-    <receiver android:name="com.novoda.location.receiver.PassiveLocationChanged"/>
+    <receiver
+      android:name="com.novoda.location.receiver.PassiveLocationChanged" />
 
-    <receiver android:name="com.novoda.location.receiver.UnregisterPassiveListenerOnLostConnectivity" enabled="false">
+    <receiver
+      android:name="com.novoda.location.receiver.UnregisterPassiveListenerOnLostConnectivity"
+      enabled="false">
       <intent-filter>
-        <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+        <action
+          android:name="android.net.conn.CONNECTIVITY_CHANGE" />
       </intent-filter>
     </receiver>
 
-    <receiver android:name="com.novoda.location.receiver.UnregisterPassiveListenerOnLowBattery">
+    <receiver
+      android:name="com.novoda.location.receiver.UnregisterPassiveListenerOnLowBattery">
       <intent-filter>
-        <action android:name="android.intent.action.BATTERY_LOW"/>
-        <action android:name="android.intent.action.BATTERY_OKAY"/>
+        <action
+          android:name="android.intent.action.BATTERY_LOW" />
+        <action
+          android:name="android.intent.action.BATTERY_OKAY" />
       </intent-filter>
     </receiver>
 
-    <receiver android:name="com.novoda.location.receiver.RestorePassiveListenerBoot">
+    <receiver
+      android:name="com.novoda.location.receiver.RestorePassiveListenerBoot">
       <intent-filter>
-        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+        <action
+          android:name="android.intent.action.BOOT_COMPLETED" />
       </intent-filter>
     </receiver>
-    
+
     <!--
-    =============================================================================
-    END IMPORTANT PART FOR THE USERS OF THE LIBRARY 
-    ============================================================================= 
+      =============================================================================
+      END IMPORTANT PART FOR THE USERS OF THE LIBRARY
+      =============================================================================
     -->
-    
-    <receiver android:exported="true" android:name=".analytics.ReferralReceiver">
+
+    <receiver
+      android:exported="true"
+      android:name=".analytics.ReferralReceiver">
       <intent-filter>
-        <action android:name="com.android.vending.INSTALL_REFERRER"/>
+        <action
+          android:name="com.android.vending.INSTALL_REFERRER" />
       </intent-filter>
     </receiver>
 
   </application>
 
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-  <uses-permission android:name="android.permission.INTERNET"/>
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+  <uses-permission
+    android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission
+    android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission
+    android:name="android.permission.INTERNET" />
+  <uses-permission
+    android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission
+    android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
 </manifest>

@@ -208,7 +208,7 @@ public class LocationUpdateList extends RoboMapActivity {
     private void displayNewLocation(final Location location) {
     	Log.v("Getting <accuracy,latitude,longitude>: " + location.getAccuracy() + " " + location.getLatitude() +
     			" " + location.getLongitude());
-        View block = getLayoutInflater().inflate(R.layout.location_table, null);
+        View block = getLayoutInflater().inflate(R.layout.location_view, null);
 
         TextView time = (TextView) block.findViewById(R.id.val_time);
         TextView accuracy = (TextView) block.findViewById(R.id.val_acc);
