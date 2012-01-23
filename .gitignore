@@ -13,3 +13,4 @@ project.properties
 **/libs
 *.idea/
 *.iml
+*classes/
