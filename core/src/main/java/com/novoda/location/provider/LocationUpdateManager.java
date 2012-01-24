@@ -7,7 +7,6 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.novoda.location.Constants;
 import com.novoda.location.LocatorSettings;
