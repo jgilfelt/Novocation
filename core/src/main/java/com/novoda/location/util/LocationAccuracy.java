@@ -1,8 +1,8 @@
 package com.novoda.location.util;
 
-import com.novoda.location.Constants;
-
 import android.location.Location;
+
+import com.novoda.location.LocatorSettings;
 
 /*
  * This code is copied from
@@ -12,7 +12,13 @@ import android.location.Location;
  */
 public class LocationAccuracy {
 	
-	public boolean isWorseLocation(Location location, Location currentBestLocation) {
+	private final LocatorSettings settings;
+
+    public LocationAccuracy(LocatorSettings settings) {
+	    this.settings = settings;
+    }
+
+    public boolean isWorseLocation(Location location, Location currentBestLocation) {
 		return !isBetterLocation(location, currentBestLocation);
 	}
 	
@@ -21,8 +27,9 @@ public class LocationAccuracy {
 	        return true;
 	    }
 	    long timeDelta = location.getTime() - currentBestLocation.getTime();
-	    boolean isSignificantlyNewer = timeDelta > Constants.UPDATES_MAX_TIME;
-	    boolean isSignificantlyOlder = timeDelta < -Constants.UPDATES_MAX_TIME;
+	    long updatesInterval = settings.getUpdatesInterval();
+        boolean isSignificantlyNewer = timeDelta > updatesInterval;
+	    boolean isSignificantlyOlder = timeDelta < -updatesInterval;
 	    boolean isNewer = timeDelta > 0;
 	    if (isSignificantlyNewer) {
 	        return true;

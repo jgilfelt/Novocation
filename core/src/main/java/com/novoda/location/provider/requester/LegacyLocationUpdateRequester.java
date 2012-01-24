@@ -23,7 +23,7 @@ import android.app.PendingIntent;
 import android.location.Criteria;
 import android.location.LocationManager;
 
-import com.novoda.location.Constants;
+import com.novoda.location.LocatorSettings;
 
 /**
  * Provides support for initiating active and passive location updates for all
@@ -33,11 +33,13 @@ import com.novoda.location.Constants;
  */
 public class LegacyLocationUpdateRequester extends BaseLocationUpdateRequester {
 
-    protected AlarmManager alarmManager;
+    protected final AlarmManager alarmManager;
+    private final LocatorSettings settings;
 
-    protected LegacyLocationUpdateRequester(LocationManager locationManager, AlarmManager alarmManager) {
+    protected LegacyLocationUpdateRequester(LocationManager locationManager, AlarmManager alarmManager, LocatorSettings settings) {
         super(locationManager);
         this.alarmManager = alarmManager;
+        this.settings = settings;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class LegacyLocationUpdateRequester extends BaseLocationUpdateRequester {
         // ensure we've transitioned beyond the minimum time and distance before
         // initiating a background nearby loction update.
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, System.currentTimeMillis()
-                + Constants.UPDATES_MAX_TIME, Constants.UPDATES_MAX_TIME, pendingIntent);
+                + settings.getUpdatesInterval(), settings.getUpdatesInterval(), pendingIntent);
     }
 
 	@Override
