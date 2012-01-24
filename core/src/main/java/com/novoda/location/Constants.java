@@ -18,7 +18,6 @@
 
 package com.novoda.location;
 
-import android.content.Intent;
 import android.content.IntentFilter;
 
 public interface Constants {
@@ -35,7 +34,7 @@ public interface Constants {
     
     String ACTIVE_LOCATION_UPDATE_ACTION = "com.novoda.location.ACTIVE_LOCATION_UPDATE_ACTION";
     String ACTIVE_LOCATION_UPDATE_PROVIDER_DISABLED_ACTION = "com.novoda.location.ACTIVE_LOCATION_UPDATE_PROVIDER_DISABLED_ACTION";
+    String ACTIVE_LOCATION_UPDATE_PROVIDER_ENABLED_ACTION = "com.novoda.location.ACTIVE_LOCATION_UPDATE_PROVIDER_ENABLED_ACTION";
     
     IntentFilter PROVIDER_DISABLED_INTENT_FILTER = new IntentFilter(ACTIVE_LOCATION_UPDATE_PROVIDER_DISABLED_ACTION);
-    Intent LOCATION_UPDATE_PROVIDER_DISABLED = new Intent(Constants.ACTIVE_LOCATION_UPDATE_PROVIDER_DISABLED_ACTION);
 }
