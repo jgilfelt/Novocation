@@ -70,10 +70,7 @@ public class PassiveLocationChanged extends BroadcastReceiver {
 		        || (currentLocation.distanceTo(location) < locationUpdateDistanceDiff)) {
 			return;
 		}
-		if (location == null) {
-			return;
-		}
-		LocatorFactory.setLocation(location);
+		updateLocation(location);
 	}
 
 	private void updateLocation(Location location) {

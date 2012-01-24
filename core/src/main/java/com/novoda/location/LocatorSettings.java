@@ -18,6 +18,9 @@ package com.novoda.location;
 
 public class LocatorSettings {
 
+    private final String packageName;
+    private final String updateAction;
+
     private boolean useGps = Constants.USE_GPS;
     private boolean updateOnLocationChange = Constants.REFRESH_DATA_ON_LOCATION_CHANGED;
     private long updatesInterval = Constants.UPDATES_MAX_TIME;
@@ -25,10 +28,7 @@ public class LocatorSettings {
     private long passiveUpdatesInterval = Constants.DEFAULT_INTERVAL_PASSIVE;
     private int passiveUpdatesDistance = Constants.DEFAULT_DISTANCE_PASSIVE;
     private boolean enablePassiveUpdates = Constants.ENABLE_PASSIVE_UPDATES;
-    
-    private String packageName;
-    private String updateAction;
-    
+
     public LocatorSettings(String packageName, String updateAction) {
         this.packageName = packageName;
         this.updateAction = updateAction;
