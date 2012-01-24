@@ -33,14 +33,6 @@ public interface Constants {
     long DEFAULT_INTERVAL_PASSIVE = 15 * 60 * 1000;
 	int DEFAULT_DISTANCE_PASSIVE = 300;
     
-    String SHARED_PREFERENCE_FILE = "novocation_prefs";
-    String SP_KEY_RUN_ONCE = "sp_key_run_once";
-    String SP_KEY_PASSIVE_LOCATION_CHANGES = "sp_key_follow_location_changes";
-    String SP_KEY_LOCATION_UPDATES_DISTANCE_DIFF = "sp_location_updates_distance_diff";
-    String SP_KEY_LOCATION_UPDATES_INTERVAL = "sp_key_location_updates_interval";
-    String SP_KEY_PASSIVE_LOCATION_UPDATES_DISTANCE_DIFF = "sp_passive_location_updates_distance_diff";
-    String SP_KEY_PASSIVE_LOCATION_UPDATES_INTERVAL = "sp_key_passive_location_updates_interval";
-    
     String ACTIVE_LOCATION_UPDATE_ACTION = "com.novoda.location.ACTIVE_LOCATION_UPDATE_ACTION";
     String ACTIVE_LOCATION_UPDATE_PROVIDER_DISABLED_ACTION = "com.novoda.location.ACTIVE_LOCATION_UPDATE_PROVIDER_DISABLED_ACTION";
     
