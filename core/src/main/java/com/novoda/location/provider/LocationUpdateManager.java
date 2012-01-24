@@ -59,7 +59,7 @@ public class LocationUpdateManager {
     
     public void fetchLastKnownLocation(Context context) {
     	LastLocationFinder finder = locationProviderFactory.getLastLocationFinder(locationManager, context);
-        lastKnownLocationTask = new LastKnownLocationTask(finder, context, settings);
+        lastKnownLocationTask = new LastKnownLocationTask(finder, settings);
         lastKnownLocationTask.execute();
     }
     

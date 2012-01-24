@@ -1,6 +1,5 @@
 package com.novoda.location.provider.task;
 
-import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
 
@@ -10,13 +9,11 @@ import com.novoda.location.provider.LastLocationFinder;
 
 public class LastKnownLocationTask extends AsyncTask<Void, Void, Location> {
     
-    private Context context;
     private LastLocationFinder lastLocationFinder;
     private int locationUpdateDistanceDiff;
     private long locationUpdateInterval;
 
-    public LastKnownLocationTask(LastLocationFinder lastLocationFinder, Context context, LocatorSettings settings) {
-        this.context = context;
+    public LastKnownLocationTask(LastLocationFinder lastLocationFinder, LocatorSettings settings) {
         this.lastLocationFinder = lastLocationFinder;
         this.locationUpdateDistanceDiff = settings.getUpdatesDistance();
         this.locationUpdateInterval = settings.getUpdatesInterval();
@@ -24,7 +21,8 @@ public class LastKnownLocationTask extends AsyncTask<Void, Void, Location> {
 
     @Override
     protected Location doInBackground(Void... params) {
-        return getLastKnownLocation(context);
+        long minimumTime = System.currentTimeMillis() - locationUpdateInterval;
+        return lastLocationFinder.getLastBestLocation(locationUpdateDistanceDiff, minimumTime);
     }
 
     @Override
@@ -33,11 +31,6 @@ public class LastKnownLocationTask extends AsyncTask<Void, Void, Location> {
         	return;
         }
         LocatorFactory.setLocation(lastKnownLocation);
-    }
-
-    protected Location getLastKnownLocation(Context context) {
-        return lastLocationFinder.getLastBestLocation(locationUpdateDistanceDiff, System.currentTimeMillis()
-                - locationUpdateInterval);
     }
 
     @Override
