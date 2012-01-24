@@ -18,8 +18,6 @@
 
 package com.novoda.location;
 
-import android.content.IntentFilter;
-
 public interface Constants {
 	
     boolean USE_GPS = true;
@@ -36,5 +34,4 @@ public interface Constants {
     String ACTIVE_LOCATION_UPDATE_PROVIDER_DISABLED_ACTION = "com.novoda.location.ACTIVE_LOCATION_UPDATE_PROVIDER_DISABLED_ACTION";
     String ACTIVE_LOCATION_UPDATE_PROVIDER_ENABLED_ACTION = "com.novoda.location.ACTIVE_LOCATION_UPDATE_PROVIDER_ENABLED_ACTION";
     
-    IntentFilter PROVIDER_DISABLED_INTENT_FILTER = new IntentFilter(ACTIVE_LOCATION_UPDATE_PROVIDER_DISABLED_ACTION);
 }
