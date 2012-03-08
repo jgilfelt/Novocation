@@ -163,7 +163,9 @@ public class DefaultLocator implements Locator {
         String bestEnabledProvider = locationManager.getBestProvider(criteria, true);
         if(bestEnabledProvider != null && LocationManager.GPS_PROVIDER.equals(bestEnabledProvider)) {
             locationManager.removeUpdates(oneShotNetworkLocationListener);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, oneShotNetworkLocationListener);
+            if (isNetworkProviderEnabled()) {
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, oneShotNetworkLocationListener);
+            }
         }
 	}
 
