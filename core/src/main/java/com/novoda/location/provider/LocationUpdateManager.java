@@ -32,27 +32,41 @@ import com.novoda.location.util.ApiLevelDetector;
 
 public class LocationUpdateManager {
 
-    private LocationUpdateRequester locationUpdateRequester;
+    private final LocationProviderFactory locationProviderFactory = new LocationProviderFactory();
+    private final LocatorSettings settings;
+    private final Criteria criteria;
+    private final LocationManager locationManager;
+    private final LocationUpdateRequester locationUpdateRequester;
     private PendingIntent locationListenerPendingIntent;
     private PendingIntent locationListenerPassivePendingIntent;
-    private LocationManager locationManager;
-    private LocatorSettings settings;
-    private Criteria criteria;
-    private LocationProviderFactory locationProviderFactory = new LocationProviderFactory();
     private AsyncTask<Void, Void, Location> lastKnownLocationTask;
     
     public LocationUpdateManager(LocatorSettings settings, Criteria criteria, Context context, LocationManager locationManager) {
     	this.settings = settings;
     	this.criteria = criteria;
     	this.locationManager = locationManager;
-    	createLocationUpdateRequester();
+    	locationUpdateRequester = locationProviderFactory.getLocationUpdateRequester(locationManager);
     	configurePendingIntents(context);
+    }
+    
+    private void configurePendingIntents(Context context) {
+        Intent activeIntent = new Intent(Constants.ACTIVE_LOCATION_UPDATE_ACTION);
+        activeIntent.setPackage(settings.getPackageName());
+        locationListenerPendingIntent = PendingIntent.getBroadcast(context, 0, activeIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent passiveIntent = new Intent(context, PassiveLocationChanged.class);
+        passiveIntent.setPackage(settings.getPackageName());
+        locationListenerPassivePendingIntent = PendingIntent.getBroadcast(context, 0, passiveIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
     }
     
 	public void requestActiveLocationUpdates() throws NoProviderAvailable {
 		try { 
 			locationUpdateRequester.requestActiveLocationUpdates(settings.getUpdatesInterval(),
-                settings.getUpdatesDistance(), criteria, locationListenerPendingIntent);
+			                                                     settings.getUpdatesDistance(), 
+			                                                     criteria, 
+			                                                     locationListenerPendingIntent);
 		} catch(IllegalArgumentException iae) {
 			throw new NoProviderAvailable();
 		}
@@ -74,31 +88,15 @@ public class LocationUpdateManager {
     
     public void fetchLastKnownLocation(Context context) {
     	LastLocationFinder finder = locationProviderFactory.getLastLocationFinder(locationManager, context);
-        lastKnownLocationTask = new LastKnownLocationTask(finder, context, settings);
+        lastKnownLocationTask = new LastKnownLocationTask(finder, settings);
         lastKnownLocationTask.execute();
     }
     
-	public void stopFecthLastKnownLocation() {
+	public void stopFetchLastKnownLocation() {
 		if (lastKnownLocationTask == null) {
 			return;
         }
 		lastKnownLocationTask.cancel(true);
 	}
-	
-	private void createLocationUpdateRequester() {
-		locationUpdateRequester = locationProviderFactory.getLocationUpdateRequester(locationManager);
-	}
-	
-    private void configurePendingIntents(Context context) {
-        Intent activeIntent = new Intent(Constants.ACTIVE_LOCATION_UPDATE_ACTION);
-        activeIntent.setPackage(settings.getPackageName());
-        locationListenerPendingIntent = PendingIntent.getBroadcast(context, 0, activeIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Intent passiveIntent = new Intent(context, PassiveLocationChanged.class);
-        passiveIntent.setPackage(settings.getPackageName());
-        locationListenerPassivePendingIntent = PendingIntent.getBroadcast(context, 0, passiveIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-    }
 
 }

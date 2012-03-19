@@ -34,17 +34,18 @@ import com.novoda.location.provider.LastLocationFinder;
  */
 public class LegacyLastLocationFinder implements LastLocationFinder {
 
+	protected final Context context;
+	protected final LocationManager locationManager;
+	protected final Criteria criteria = new Criteria();
+	
 	protected LocationListener locationListener;
-	protected LocationManager locationManager;
-	protected Criteria criteria;
-	protected Context context;
 
 	public LegacyLastLocationFinder(LocationManager locationManager, Context context) {
 		this.context = context;
 		this.locationManager = locationManager;
-		createCriteria();
+		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
 	}
-
+	   
 	@Override
 	public Location getLastBestLocation(int minDistance, long minTime) {
 		Location bestResult = null;
@@ -73,22 +74,17 @@ public class LegacyLastLocationFinder implements LastLocationFinder {
 			}
 		}
 
-		// If the best result is beyond the allowed time limit, or the accuracy
-		// of the
-		// best result is wider than the acceptable maximum distance, request a
-		// single update.
-		// This check simply implements the same conditions we set when
-		// requesting regular
+		// If the best result is beyond the allowed time limit, or the accuracy of the
+		// best result is wider than the acceptable maximum distance, request a single update.
+		// This check simply implements the same conditions we set when requesting regular
 		// location updates every [minTime] and [minDistance].
-		// Prior to Gingerbread "one-shot" updates weren't available, so we need
-		// to implement
+		// Prior to Gingerbread "one-shot" updates weren't available, so we need to implement
 		// this manually.
-		if (locationListener != null
-				&& (bestTime > minTime || bestAccuracy > minDistance)) {
+		if (locationListener != null && (bestTime > minTime || bestAccuracy > minDistance)) {
 			String provider = locationManager.getBestProvider(criteria, true);
-			if (provider != null)
-				locationManager.requestLocationUpdates(provider, 0, 0,
-						singeUpdateListener, context.getMainLooper());
+			if (provider != null){
+			    locationManager.requestLocationUpdates(provider, 0, 0, singeUpdateListener, context.getMainLooper());
+			}
 		}
 		return bestResult;
 	}
@@ -121,9 +117,5 @@ public class LegacyLastLocationFinder implements LastLocationFinder {
 	public void cancel() {
 		locationManager.removeUpdates(singeUpdateListener);
 	}
-	
-	private void createCriteria() {
-		criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-	}
+
 }

@@ -23,37 +23,178 @@ package com.novoda.location.locator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 
 import com.novoda.location.Constants;
 import com.novoda.location.Locator;
 import com.novoda.location.LocatorSettings;
 import com.novoda.location.exception.NoProviderAvailable;
-import com.novoda.location.listener.LocationProviderListener;
 import com.novoda.location.provider.LocationProviderFactory;
 import com.novoda.location.provider.LocationUpdateManager;
 import com.novoda.location.util.LocationAccuracy;
 
 public class DefaultLocator implements Locator {
 
-	private LocationAccuracy locationAccuracy = new LocationAccuracy();
-	private BroadcastReceiver registerDisabledProviderReceiver;
 	private volatile Location currentLocation;
+	private LocationAccuracy locationAccuracy;
     private Context context;
     private LocatorSettings settings;
     private LocationManager locationManager;
     private Criteria criteria;
-    private LocationProviderListener bestLocationListener;
-    private LocationProviderListener networkLocationListener;
     private LocationUpdateManager locationUpdateManager;
+    
+    private final BroadcastReceiver providerStatusChanged = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                locationUpdateManager.removeUpdates();
+                startListeningForLocationUpdates();
+            } catch (NoProviderAvailable npa) {
+                //We cant listen for updates if no provider is enabled
+            }
+        }
+    };
+    
+    private final LocationListener oneShotNetworkLocationListener = new LocationListener() {
+        
+        @Override
+        public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+            locationManager.removeUpdates(this);
+        }
+        
+        @Override
+        public void onProviderEnabled(String arg0) {
+            locationManager.removeUpdates(this);
+        }
+        
+        @Override
+        public void onProviderDisabled(String arg0) {
+            locationManager.removeUpdates(this);
+        }
+        
+        @Override
+        public void onLocationChanged(Location location) {
+            locationManager.removeUpdates(this);
+            setLocation(location);
+        }
+    };
     
     @Override
     public void prepare(Context c, LocatorSettings settings) {
-        this.context = c;
         this.settings = settings;
-        this.locationManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
+        context = c;
+        locationManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
+        locationAccuracy = new LocationAccuracy(settings);
+    }
+
+    @Override
+    public LocatorSettings getSettings() {
+        return settings;
+    }
+
+    @Override
+    public void startLocationUpdates() throws NoProviderAvailable {
+        createActiveUpdateCriteria();
+        persistSettingsToPreferences();
+        
+        createLocationUpdateManager();
+        sendFirstAvailableLocation();
+        
+        startListeningForLocationUpdates();
+    }
+    
+    private void createActiveUpdateCriteria() {
+        criteria = new Criteria();
+        if (settings.shouldUseGps()) {
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        } else {
+            criteria.setPowerRequirement(Criteria.POWER_LOW);
+        }
+    }
+
+	private void persistSettingsToPreferences() {
+		new LocationProviderFactory().getSettingsDao().persistSettingsToPreferences(context, settings);
+	}
+	
+	private void createLocationUpdateManager() {
+	    this.locationUpdateManager = new LocationUpdateManager(settings, criteria, context, locationManager);
+	}
+    
+	private void sendFirstAvailableLocation() {
+		if (currentLocation == null) {
+			locationUpdateManager.fetchLastKnownLocation(context);
+        }else{
+            sendLocationUpdateBroadcast();
+        }
+	}
+	
+    private void sendLocationUpdateBroadcast() {
+        if (context == null) {
+            return;
+        }
+        Intent broadcast = new Intent();
+        broadcast.setAction(settings.getUpdateAction());
+        broadcast.setPackage(settings.getPackageName());
+        context.sendBroadcast(broadcast);
+    }
+    
+    private void startListeningForLocationUpdates() throws NoProviderAvailable {
+    	if (!settings.shouldUpdateLocation()) {
+    		return;
+    	}
+    	locationUpdateManager.requestActiveLocationUpdates();
+        registerProviderStatusChangedReceiver(context);
+        ifGPSregisterOneShotNetworkUpdate(context);
+        locationUpdateManager.removePassiveUpdates();
+    }
+    
+    private void registerProviderStatusChangedReceiver(Context c) {
+        IntentFilter providerDisabled = new IntentFilter(Constants.ACTIVE_LOCATION_UPDATE_PROVIDER_DISABLED_ACTION);
+        c.registerReceiver(providerStatusChanged, providerDisabled);
+        IntentFilter providerEnabled = new IntentFilter(Constants.ACTIVE_LOCATION_UPDATE_PROVIDER_ENABLED_ACTION);   
+        c.registerReceiver(providerStatusChanged, providerEnabled);
+    }
+    
+	private void ifGPSregisterOneShotNetworkUpdate(Context context) {
+        String bestEnabledProvider = locationManager.getBestProvider(criteria, true);
+        if(bestEnabledProvider != null && LocationManager.GPS_PROVIDER.equals(bestEnabledProvider)) {
+            locationManager.removeUpdates(oneShotNetworkLocationListener);
+            if (isNetworkProviderEnabled()) {
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, oneShotNetworkLocationListener);
+            }
+        }
+	}
+
+    @Override
+    public void stopLocationUpdates() {
+        if (!settings.shouldUpdateLocation()) {
+            return;
+        }
+        stopListeningForLocationUpdates();
+    }
+
+    private void stopListeningForLocationUpdates() {
+        unregisterDisabledProviderReceiver();
+        locationUpdateManager.removeUpdates();
+        locationUpdateManager.stopFetchLastKnownLocation();
+        locationUpdateManager.requestPassiveLocationUpdates();
+        locationManager.removeUpdates(oneShotNetworkLocationListener);
+    }
+
+    private void unregisterDisabledProviderReceiver() {
+        if(providerStatusChanged == null) {
+            return;
+        }
+        try {
+            context.unregisterReceiver(providerStatusChanged);
+        } catch (Exception e) {
+            //In case is not registered
+        }
     }
 
     @Override
@@ -69,167 +210,14 @@ public class DefaultLocator implements Locator {
         currentLocation = location;
         sendLocationUpdateBroadcast();
     }
-    
-    @Override
-    public LocatorSettings getSettings() {
-        return settings;
-    }
 
     @Override
-    public void startLocationUpdates() throws NoProviderAvailable {
-        createActiveUpdateCriteria();
-        persistSettingsToPreferences();
-        
-        createLocationUpdateManager();
-        sendFirstAvailableLocation();
-        
-        prepareDisabledProviderReceiver();
-        startListeningForLocationUpdates();
+    public boolean isNetworkProviderEnabled() {
+        return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
     @Override
-	public void stopLocationUpdates() {
-        if (!settings.shouldUpdateLocation()) {
-            return;
-        }
-        stopListeningForLocationUpdates();
+    public boolean isGpsProviderEnabled() {
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
-	
-    @Override
-	public boolean isNetworkProviderEnabled() {
-	    return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-	}
-
-    @Override
-	public boolean isGpsProviderEnabled() {
-	    return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-	}
-	
-	private void createLocationUpdateManager() throws NoProviderAvailable {
-		this.locationUpdateManager = new LocationUpdateManager(settings, criteria, context, locationManager);
-	}
-
-	private void persistSettingsToPreferences() {
-		new LocationProviderFactory().getSettingsDao().persistSettingsToPreferences(context, settings);
-	}
-    
-	private void sendFirstAvailableLocation() {
-		if (currentLocation == null) {
-			locationUpdateManager.fetchLastKnownLocation(context);
-            return;
-        }
-		sendLocationUpdateBroadcast();
-	}
-    
-    private void startListeningForLocationUpdates() throws NoProviderAvailable {
-    	if (!settings.shouldUpdateLocation()) {
-    		return;
-    	}
-    	locationUpdateManager.requestActiveLocationUpdates();
-        registerProviderDisabledReceiver(context);
-        requestAccurateProvider(context);
-    }
-
-	private void requestAccurateProvider(Context context) {
-		String bestProvider = locationManager.getBestProvider(criteria, false);
-        String bestAvailableProvider = locationManager.getBestProvider(criteria, true);
-        if (bestProvider != null && !bestProvider.equals(bestAvailableProvider)) {
-        	if(LocationManager.GPS_PROVIDER.equals(bestProvider)) {
-        		addNetworkLocationProviderListener(context);
-        	}
-            addBestLocationProviderListener(context, bestProvider);
-        }
-        locationUpdateManager.removePassiveUpdates();
-	}
-
-	private void addBestLocationProviderListener(Context context, String bestProvider) {
-		bestLocationListener = new CustomLocationProviderListener();
-		locationManager.requestLocationUpdates(bestProvider, 0, 0, bestLocationListener,
-		        context.getMainLooper());
-	}
-
-	private void addNetworkLocationProviderListener(Context context) {
-		networkLocationListener = new CustomLocationProviderListener();
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, networkLocationListener,
-		        context.getMainLooper());
-	}
-
-    private void stopListeningForLocationUpdates() {
-        unregisterDisabledProviderReceiver();
-        locationUpdateManager.removeUpdates();
-        if (bestLocationListener != null) {
-            locationManager.removeUpdates(bestLocationListener);
-        }
-        if(networkLocationListener != null) {
-        	locationManager.removeUpdates(networkLocationListener);
-        }
-        locationUpdateManager.stopFecthLastKnownLocation();
-        locationUpdateManager.requestPassiveLocationUpdates();
-    }
-
-	private void registerProviderDisabledReceiver(Context c) {
-		c.registerReceiver(registerDisabledProviderReceiver, Constants.PROVIDER_DISABLED_INTENT_FILTER);
-	}
-	
-	private void prepareDisabledProviderReceiver() {
-		registerDisabledProviderReceiver = new BroadcastReceiver() {
-	        @Override
-	        public void onReceive(Context context, Intent intent) {
-	            if (isProviderEnabled(intent)) {
-	            	return;
-	            }
-	            startListeningForLocationUpdatesSilently();
-	        }
-	    };
-	}
-	
-    private void sendLocationUpdateBroadcast() {
-        if (context == null) {
-        	return;
-        }
-        Intent broadcast = new Intent();
-        broadcast.setAction(settings.getUpdateAction());
-        broadcast.setPackage(settings.getPackageName());
-        context.sendBroadcast(broadcast);
-    }
-	
-    private void createActiveUpdateCriteria() {
-        criteria = new Criteria();
-        if (settings.shouldUseGps()) {
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        } else {
-            criteria.setPowerRequirement(Criteria.POWER_LOW);
-        }
-    }
-    
-    private boolean isProviderEnabled(Intent intent) {
-    	return intent.getBooleanExtra(LocationManager.KEY_PROVIDER_ENABLED, false);
-    }
-    
-    private class CustomLocationProviderListener extends LocationProviderListener {
-		@Override
-		public void onProviderEnabled(String provider) {
-			startListeningForLocationUpdatesSilently();
-		}
-	};
-	
-	private void startListeningForLocationUpdatesSilently() {
-		try {
-			startListeningForLocationUpdates();
-		} catch (NoProviderAvailable npa) {
-			
-		}
-	}
-	
-	private void unregisterDisabledProviderReceiver() {
-		if(registerDisabledProviderReceiver == null) {
-			return;
-		}
-		try {
-			context.unregisterReceiver(registerDisabledProviderReceiver);
-		} catch (Exception e) {
-			//In case is not registered
-		}
-	}
-
 }

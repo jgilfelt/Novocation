@@ -25,45 +25,45 @@ import com.novoda.location.Constants;
 import com.novoda.location.LocatorSettings;
 
 public class SharedPreferenceSettingsDao implements SettingsDao {
+    
+    private static final String SHARED_PREFERENCE_FILE = "novocation_prefs";
+    private static final String SP_KEY_RUN_ONCE = "sp_key_run_once";
+    private static final String SP_KEY_PASSIVE_LOCATION_CHANGES = "sp_key_follow_location_changes";
+    private static final String SP_KEY_PASSIVE_LOCATION_UPDATES_DISTANCE_DIFF = "sp_passive_location_updates_distance_diff";
+    private static final String SP_KEY_PASSIVE_LOCATION_UPDATES_INTERVAL = "sp_key_passive_location_updates_interval";
+    
+    @Override
+    public void persistSettingsToPreferences(Context context, LocatorSettings settings) {
+        Editor editor = getSharedPrefs(context).edit();
+        editor.putBoolean(SP_KEY_PASSIVE_LOCATION_CHANGES, settings.shouldEnablePassiveUpdates());
+        editor.putInt(SP_KEY_PASSIVE_LOCATION_UPDATES_DISTANCE_DIFF, settings.getPassiveUpdatesDistance());
+        editor.putLong(SP_KEY_PASSIVE_LOCATION_UPDATES_INTERVAL, settings.getPassiveUpdatesInterval());
+        editor.putBoolean(SP_KEY_RUN_ONCE, true);
+        editor.commit();
+    }
 
 	@Override
     public long getPassiveLocationInterval(Context context) {
-        return getSharedPrefs(context).getLong(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_INTERVAL,
-                Constants.UPDATES_MAX_TIME);
+        return getSharedPrefs(context).getLong(SP_KEY_PASSIVE_LOCATION_UPDATES_INTERVAL, Constants.UPDATES_MAX_TIME);
     }
 
     @Override
     public int getPassiveLocationDistance(Context context) {
-        return getSharedPrefs(context).getInt(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_DISTANCE_DIFF,
-                Constants.UPDATES_MAX_DISTANCE);
-    }
-
-    @Override
-    public void persistSettingsToPreferences(Context context, LocatorSettings settings) {
-        SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
-        Editor editor = prefs.edit();
-        editor.putBoolean(Constants.SP_KEY_PASSIVE_LOCATION_CHANGES, settings.shouldEnablePassiveUpdates());
-        editor.putInt(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_DISTANCE_DIFF, settings.getPassiveUpdatesDistance());
-        editor.putLong(Constants.SP_KEY_PASSIVE_LOCATION_UPDATES_INTERVAL, settings.getPassiveUpdatesInterval());
-        editor.putBoolean(Constants.SP_KEY_RUN_ONCE, true);
-        editor.commit();
+        return getSharedPrefs(context).getInt(SP_KEY_PASSIVE_LOCATION_UPDATES_DISTANCE_DIFF, Constants.UPDATES_MAX_DISTANCE);
     }
     
     @Override
 	public boolean isPassiveLocationChanges(Context context) {
-		SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
-		return prefs.getBoolean(Constants.SP_KEY_PASSIVE_LOCATION_CHANGES, true);
+		return getSharedPrefs(context).getBoolean(SP_KEY_PASSIVE_LOCATION_CHANGES, true);
 	}
 
     @Override
 	public boolean isRunOnce(Context context) {
-		SharedPreferences prefs = context.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
-		return prefs.getBoolean(Constants.SP_KEY_RUN_ONCE, false);
+		return getSharedPrefs(context).getBoolean(SP_KEY_RUN_ONCE, false);
 	}
-
     
     private SharedPreferences getSharedPrefs(Context context) {
-        return context.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
+        return context.getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
     }
     
 }

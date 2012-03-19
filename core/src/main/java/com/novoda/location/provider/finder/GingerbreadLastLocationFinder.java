@@ -33,31 +33,22 @@ import android.location.LocationManager;
 
 public class GingerbreadLastLocationFinder implements LastLocationFinder {
 
-	protected static String SINGLE_LOCATION_UPDATE_ACTION = "com.radioactiveyak.places.SINGLE_LOCATION_UPDATE_ACTION";
-	protected static String TAG = "LastLocationFinder";
+	protected static final String SINGLE_LOCATION_UPDATE_ACTION = "com.radioactiveyak.places.SINGLE_LOCATION_UPDATE_ACTION";
+	protected static final String TAG = "LastLocationFinder";
 
-	protected PendingIntent singleUpatePI;
+	protected final PendingIntent singleUpatePI;
+	protected final LocationManager locationManager;
+	protected final Context context;
+	protected final Criteria criteria = new Criteria();
+
 	protected LocationListener locationListener;
-	protected LocationManager locationManager;
-	protected Context context;
-	protected Criteria criteria;
-
+	
 	public GingerbreadLastLocationFinder(LocationManager locationManager, Context context) {
 		this.context = context;
 		this.locationManager = locationManager;
-		createCriteria();
-		createPendingIntent(context);
-	}
-
-	private void createCriteria() {
-		criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_LOW);
-	}
-
-	private void createPendingIntent(Context context) {
 		Intent updateIntent = new Intent(SINGLE_LOCATION_UPDATE_ACTION);
-		singleUpatePI = PendingIntent.getBroadcast(context, 0, updateIntent,
-				PendingIntent.FLAG_UPDATE_CURRENT);
+		singleUpatePI = PendingIntent.getBroadcast(context, 0, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
 	@Override
@@ -87,17 +78,12 @@ public class GingerbreadLastLocationFinder implements LastLocationFinder {
 			}
 		}
 
-		// If the best result is beyond the allowed time limit, or the accuracy
-		// of the
-		// best result is wider than the acceptable maximum distance, request a
-		// single update.
-		// This check simply implements the same conditions we set when
-		// requesting regular
+		// If the best result is beyond the allowed time limit, or the accuracy of the
+		// best result is wider than the acceptable maximum distance, request a single update.
+		// This check simply implements the same conditions we set when requesting regular
 		// location updates every [minTime] and [minDistance].
-		if (locationListener != null
-				&& (bestTime < minTime || bestAccuracy > minDistance)) {
-			IntentFilter locIntentFilter = new IntentFilter(
-					SINGLE_LOCATION_UPDATE_ACTION);
+		if (locationListener != null && (bestTime < minTime || bestAccuracy > minDistance)) {
+			IntentFilter locIntentFilter = new IntentFilter(SINGLE_LOCATION_UPDATE_ACTION);
 			context.registerReceiver(singleUpdateReceiver, locIntentFilter);
 			locationManager.requestSingleUpdate(criteria, singleUpatePI);
 		}

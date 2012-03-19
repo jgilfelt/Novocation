@@ -33,22 +33,34 @@ public class LocationChanged extends BroadcastReceiver {
     	if(i == null) {
     		return;
     	}
-        if (isProviderNotEnabled(i)) {
-            context.sendBroadcast(Constants.LOCATION_UPDATE_PROVIDER_DISABLED);
-        }
-        if (hasLocationChanged(i)) {
+    	if(providerStatusHasChanged(i)){
+    	    broadcastProviderStatusHasChanged(context, i);
+    	}
+    	
+        if (locationHasChanged(i)) {
             LocatorFactory.setLocation(getLocation(i));
         }
     }
     
-    private boolean isProviderNotEnabled(Intent intent) {
-    	if (!intent.hasExtra(LocationManager.KEY_PROVIDER_ENABLED)) {
-    		return false;
-    	}
-    	return !intent.getBooleanExtra(LocationManager.KEY_PROVIDER_ENABLED, true);
+    private boolean providerStatusHasChanged(Intent i) {
+        return i.hasExtra(LocationManager.KEY_PROVIDER_ENABLED);
+    }
+
+    private void broadcastProviderStatusHasChanged(Context context, Intent i) {
+        Intent providerStatusChanged;
+        if(providerHasBeenEnabled(i)){
+            providerStatusChanged = new Intent(Constants.ACTIVE_LOCATION_UPDATE_PROVIDER_ENABLED_ACTION);
+        }else{
+            providerStatusChanged = new Intent(Constants.ACTIVE_LOCATION_UPDATE_PROVIDER_DISABLED_ACTION);    
+        }
+        context.sendBroadcast(providerStatusChanged);
+    }
+
+    private boolean providerHasBeenEnabled(Intent i) {
+        return i.getBooleanExtra(LocationManager.KEY_PROVIDER_ENABLED, false);
     }
     
-    private boolean hasLocationChanged(Intent intent) {
+    private boolean locationHasChanged(Intent intent) {
     	return intent.hasExtra(LocationManager.KEY_LOCATION_CHANGED);
     }
     

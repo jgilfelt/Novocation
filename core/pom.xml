@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.novoda.location</groupId>
     <artifactId>novocation-parent</artifactId>
-    <version>1.0.6-SNAPSHOT</version>
+    <version>1.0.7-SNAPSHOT</version>
   </parent>
 
   <artifactId>novocation-core</artifactId>
@@ -13,7 +13,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.google.android</groupId>
+      <groupId>android</groupId>
       <artifactId>android</artifactId>
       <version>${android.version}</version>
       <scope>provided</scope>

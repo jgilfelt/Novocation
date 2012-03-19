@@ -11,3 +11,6 @@ bin
 R.java
 project.properties
 **/libs
+*.idea/
+*.iml
+*classes/
