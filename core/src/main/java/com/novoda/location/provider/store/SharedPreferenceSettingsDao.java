@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2011 Novoda Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,6 @@
  * 
  * Sections copyright Matthias Kaeppler 2009-2011 based on Ignition-Support.
  */
-
 package com.novoda.location.provider.store;
 
 import android.content.Context;

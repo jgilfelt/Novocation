@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2011 Novoda Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,9 @@
  * 
  * This code is based on Reto Meier's Location Pro-tips and Stefano 
  * Dacchille's IgnitedLocation.
+ * 
+ * Code modified by Novoda Ltd, 2011.
  */
-
 package com.novoda.location.locator;
 
 import android.content.BroadcastReceiver;
